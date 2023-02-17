@@ -1,12 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import { Button } from 'react-bootstrap';
+import AddTodo from './components/AddToDo';
+import ToDo from './components/ToDo';
 
 function App() {
   return (
     <div className="App">
-      <h1>Here we are</h1>
-      <Button variant="primary">Primary</Button>
+      <AddTodo />
+      <ToDo />
     </div>
   );
 }
