@@ -2,6 +2,7 @@ import './App.css';
 import AddTodo from './components/AddToDo';
 import ToDo from './components/ToDo';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import TodoList from './components/ToDoList';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
               <h1>My ToDos</h1>
               <AddTodo />
               <ToDo />
+              <TodoList />
             </Card>
           </Col>
         </Row>
