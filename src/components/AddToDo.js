@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddTodo = ({ addTodo }) => {
 	const [title, setTitle] = useState('')
@@ -13,6 +15,8 @@ const AddTodo = ({ addTodo }) => {
 			completed: false,
 		})
 	}
+	const [deadline, setDeadline] = useState(null);
+
 
 	return (
 		<Form>
