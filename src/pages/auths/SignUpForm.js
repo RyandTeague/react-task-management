@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
-import {
-  Form,
-  Button,
-  Image,
-  Col,
-  Row,
-  Container,
-  Alert,
-} from "react-bootstrap";
+import { Form, Button, Image, Col, Row, Container, Alert } from "react-bootstrap";
 import axios from "axios";
 
 const SignUpForm = () => {
@@ -21,12 +13,14 @@ const SignUpForm = () => {
     username: "",
     password1: "",
     password2: "",
+    first_name: "",
+    last_name: "",
   });
-  const { username, password1, password2 } = signUpData;
+  const { username, password1, password2, first_name, last_name } = signUpData;
 
   const [errors, setErrors] = useState({});
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const handleChange = (event) => {
     setSignUpData({
@@ -38,7 +32,16 @@ const SignUpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("/dj-rest-auth/registration/", signUpData);
+      const response = await axios.post("/dj-rest-auth/registration/", signUpData);
+      const token = response.data.key;
+      const config = {
+        headers: { Authorization: `Token ${token}` },
+      };
+      const profileData = {
+        first_name,
+        last_name,
+      };
+      await axios.post("/profiles/", profileData, config);
       history.push("/signin");
     } catch (err) {
       setErrors(err.response?.data);
@@ -102,6 +105,41 @@ const SignUpForm = () => {
                 {message}
               </Alert>
             ))}
+
+            <Form.Group controlId="first_name">
+              <Form.Label className="d-none">First Name</Form.Label>
+              <Form.Control
+                className={styles.Input}
+                type="text"
+                placeholder="First Name"
+                name="first_name"
+                value={first_name}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            {errors.first_name?.map((message, idx) => (
+              <Alert key={idx} variant="warning">
+                {message}
+              </Alert>
+            ))}
+
+            <Form.Group controlId="last_name">
+              <Form.Label className="d-none">Last Name</Form.Label>
+              <Form.Control
+                className={styles.Input}
+                type="text"
+                placeholder="Last Name"
+                name="last_name"
+                value={last_name}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            {errors.last_name?.map((message, idx) => (
+              <Alert key={idx} variant="warning">
+                {message}
+              </Alert>
+            ))}
+
 
             <Button
               className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
 import { NavLink } from "react-router-dom";
 import {
@@ -9,7 +8,8 @@ import {
 } from "../contexts/CurrentUserContext";
 import Avatar from "./Avatar";
 import axios from "axios";
-import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
+import useClickOutsideToggle from "../hooks/UseClickOutsideToggle";
+import { removeTokenTimestamp } from "../utils/utils";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
@@ -21,23 +21,14 @@ const NavBar = () => {
     try {
       await axios.post("dj-rest-auth/logout/");
       setCurrentUser(null);
+      removeTokenTimestamp();
     } catch (err) {
       console.log(err);
     }
   };
-
-  const addPostIcon = (
-    <NavLink
-      className={styles.NavLink}
-      activeClassName={styles.Active}
-      to="/posts/create"
-    >
-      <i className="far fa-plus-square"></i>Add post
-    </NavLink>
-  );
   const loggedInIcons = (
     <>
-      <NavLink
+      {/*<NavLink
         className={styles.NavLink}
         activeClassName={styles.Active}
         to="/feed"
@@ -59,12 +50,12 @@ const NavBar = () => {
         to={`/profiles/${currentUser?.profile_id}`}
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
-      </NavLink>
+  </NavLink>*/}
     </>
   );
   const loggedOutIcons = (
     <>
-      <NavLink
+      {/*<NavLink
         className={styles.NavLink}
         activeClassName={styles.Active}
         to="/signin"
@@ -77,7 +68,7 @@ const NavBar = () => {
         activeClassName={styles.Active}
       >
         <i className="fas fa-user-plus"></i>Sign up
-      </NavLink>
+  </NavLink>*/}
     </>
   );
 
@@ -89,12 +80,10 @@ const NavBar = () => {
       fixed="top"
     >
       <Container>
-        <NavLink to="/">
           <Navbar.Brand>
-            <img src={logo} alt="logo" height="45" />
+            <h1 className="ml-1" height="45">Task Manager</h1>
           </Navbar.Brand>
-        </NavLink>
-        {currentUser && addPostIcon}
+        {currentUser}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
@@ -102,14 +91,14 @@ const NavBar = () => {
         />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
-            <NavLink
+            {/* <NavLink
               exact
               className={styles.NavLink}
               activeClassName={styles.Active}
               to="/"
             >
               <i className="fas fa-home"></i>Home
-            </NavLink>
+            </NavLink>*/}
 
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
