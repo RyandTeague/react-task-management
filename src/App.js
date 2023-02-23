@@ -91,8 +91,8 @@ function App() {
 				<ErrorBoundary>
 					<Routes>
 						<Route path="/" element={<HomePage />} />
-						<Route path="/signin" render={() => <SignInForm />} />
-						<Route path="/signup" render={() => <SignUpForm />} />
+						<Route path="/signin" element={<SignInForm />} />
+						<Route path="/signup" element={<SignUpForm />} />
 					</Routes>
 				</ErrorBoundary>
 			</Container>
