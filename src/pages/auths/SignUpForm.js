@@ -5,7 +5,7 @@ import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
-import { Form, Button, Image, Col, Row, Container, Alert } from "react-bootstrap";
+import { Form, Button, Col, Row, Container, Alert } from "react-bootstrap";
 import axios from "axios";
 
 const SignUpForm = () => {
@@ -32,7 +32,7 @@ const SignUpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/dj-rest-auth/registration/", signUpData);
+      const response = await axios.post("https://task-backend.herokuapp.com/dj-rest-auth/registration/", signUpData);
       const token = response.data.key;
       const config = {
         headers: { Authorization: `Token ${token}` },
@@ -41,8 +41,8 @@ const SignUpForm = () => {
         first_name,
         last_name,
       };
-      await axios.post("/profiles/", profileData, config);
-      history.push("/signin");
+      await axios.post("https://task-backend.herokuapp.com/dj-rest-auth/registration/", profileData, config);
+      history.push("https://task-backend.herokuapp.com/signin");
     } catch (err) {
       setErrors(err.response?.data);
     }
@@ -165,10 +165,6 @@ const SignUpForm = () => {
         md={6}
         className={`my-auto d-none d-md-block p-2 ${styles.SignUpCol}`}
       >
-        <Image
-          className={`${appStyles.FillerImage}`}
-          src={"https://codeinstitute.s3.amazonaws.com/AdvancedReact/hero2.jpg"}
-        />
       </Col>
     </Row>
   );
