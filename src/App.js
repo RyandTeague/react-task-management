@@ -10,6 +10,7 @@ import SignUpForm from "./pages/auths/SignUpForm";
 import SignInForm from "./pages/auths/SignInForm";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
 import HomePage from './pages/auths/HomePage';
+import Signup from './pages/auths/SignUp';
 
 function App() {
 	const currentUser = useCurrentUser();

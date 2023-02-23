@@ -6,168 +6,133 @@ import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
 import { Form, Button, Col, Row, Container, Alert } from "react-bootstrap";
-import axios from "axios";
+import { axiosReq } from "../../api/axiosDefaults"
 
-const SignUpForm = () => {
-  const [signUpData, setSignUpData] = useState({
+const SignUpPage = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password1: "",
     password2: "",
-    first_name: "",
-    last_name: "",
   });
-  const { username, password1, password2, first_name, last_name } = signUpData;
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const [errors, setErrors] = useState({});
-
-  const history = useNavigate();
-
-  const handleChange = (event) => {
-    setSignUpData({
-      ...signUpData,
-      [event.target.name]: event.target.value,
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post("https://task-backend.herokuapp.com/dj-rest-auth/registration/", signUpData);
-      const token = response.data.key;
-      const config = {
-        headers: { Authorization: `Token ${token}` },
-      };
-      const profileData = {
-        first_name,
-        last_name,
-      };
-      await axios.post("https://task-backend.herokuapp.com/dj-rest-auth/registration/", profileData, config);
-      history.push("https://task-backend.herokuapp.com/signin");
-    } catch (err) {
-      setErrors(err.response?.data);
+      const response = await axiosReq.post(
+        "/dj-rest-auth/registration/",
+        formData
+      );
+      setSuccess(true);
+      setError(null);
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        setError(error.response.data);
+        setSuccess(false);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        setError("Server is not responding. Please try again later.");
+        setSuccess(false);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        setError("Something went wrong. Please try again later.");
+        setSuccess(false);
+      }
     }
   };
 
+
   return (
-    <Row className={styles.Row}>
-      <Col className="my-auto py-2 p-md-2" md={6}>
-        <Container className={`${appStyles.Content} p-4 `}>
-          <h1 className={styles.Header}>sign up</h1>
-
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label className="d-none">username</Form.Label>
-              <Form.Control
-                className={styles.Input}
-                type="text"
-                placeholder="Username"
-                name="username"
-                value={username}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            {errors.username?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
+    <div className={styles.formWrapper}>
+      <Container>
+        <Row className={styles.formRow}>
+          <Col xs={12} sm={10} md={8} lg={6} xl={4}>
+            <h2 className={appStyles.title}>Sign Up</h2>
+            {error && <Alert variant="danger">{error && error.detail}</Alert>}
+            {success && (
+              <Alert variant="success">
+                Successfully registered! Please check your email to confirm
+                your account.
               </Alert>
-            ))}
-
-            <Form.Group controlId="password1">
-              <Form.Label className="d-none">Password</Form.Label>
-              <Form.Control
-                className={styles.Input}
-                type="password"
-                placeholder="Password"
-                name="password1"
-                value={password1}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            {errors.password1?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
-                {message}
-              </Alert>
-            ))}
-
-            <Form.Group controlId="password2">
-              <Form.Label className="d-none">Confirm password</Form.Label>
-              <Form.Control
-                className={styles.Input}
-                type="password"
-                placeholder="Confirm password"
-                name="password2"
-                value={password2}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            {errors.password2?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
-                {message}
-              </Alert>
-            ))}
-
-            <Form.Group controlId="first_name">
-              <Form.Label className="d-none">First Name</Form.Label>
-              <Form.Control
-                className={styles.Input}
-                type="text"
-                placeholder="First Name"
-                name="first_name"
-                value={first_name}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            {errors.first_name?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
-                {message}
-              </Alert>
-            ))}
-
-            <Form.Group controlId="last_name">
-              <Form.Label className="d-none">Last Name</Form.Label>
-              <Form.Control
-                className={styles.Input}
-                type="text"
-                placeholder="Last Name"
-                name="last_name"
-                value={last_name}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            {errors.last_name?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
-                {message}
-              </Alert>
-            ))}
-
-
-            <Button
-              className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
-              type="submit"
-            >
-              Sign up
-            </Button>
-            {errors.non_field_errors?.map((message, idx) => (
-              <Alert key={idx} variant="warning" className="mt-3">
-                {message}
-              </Alert>
-            ))}
-          </Form>
-        </Container>
-
-        <Container className={`mt-3 ${appStyles.Content}`}>
-          <Link className={styles.Link} to="/signin">
-            Already have an account? <span>Sign in</span>
-          </Link>
-        </Container>
-      </Col>
-      <Col
-        md={6}
-        className={`my-auto d-none d-md-block p-2 ${styles.SignUpCol}`}
-      >
-      </Col>
-    </Row>
+            )}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="formBasicUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  name="password1"
+                  value={formData.password1}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicPasswordConfirm">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="password2"
+                  value={formData.password2}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="submit"
+                className={btnStyles.primaryBtn}
+              >
+                Sign Up
+              </Button>
+            </Form>
+            <p className={styles.formBottom}>
+              Already have an account? <Link to="/signin">Sign In</Link>
+            </p>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
-export default SignUpForm;
+export default SignUpPage;
