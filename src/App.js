@@ -42,7 +42,7 @@ function App() {
 			<Container className={styles.Main}>
 				<ErrorBoundary>
 					<Routes>
-						<Route path="/" element={<TaskPage />} />
+						<Route path="/" element={<ToDo />} />
 						<Route path="/signin" element={<SignInForm />} />
 						<Route path="/signup" element={<SignUpForm />} />
 						<Route path="/tasks" element={<TaskPage />} />
