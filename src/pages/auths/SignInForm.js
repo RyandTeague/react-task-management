@@ -30,7 +30,7 @@ function SignInForm() {
 
   const [errors, setErrors] = useState({});
 
-  const history = useNavigate();
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -38,7 +38,7 @@ function SignInForm() {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
       setCurrentUser(data.user);
       setTokenTimestamp(data);
-      history.goBack();
+      navigate(-1);
     } catch (err) {
       setErrors(err.response?.data);
     }
