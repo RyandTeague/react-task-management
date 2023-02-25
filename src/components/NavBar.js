@@ -1,3 +1,4 @@
+// Importing required dependencies and components
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import styles from "../styles/NavBar.module.css";
@@ -11,21 +12,30 @@ import axios from "axios";
 import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
 import { removeTokenTimestamp } from "../utils/utils";
 
+// Defining the NavBar component
 const NavBar = () => {
+  // Fetching the current user and setCurrentUser function from CurrentUserContext
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
 
+  // Using a custom hook called useClickOutsideToggle to toggle the navbar when clicked outside
   const { expanded, setExpanded, ref } = useClickOutsideToggle();
 
+  // Function to handle signing out
   const handleSignOut = async () => {
     try {
+      // Making an axios post request to log out the user
       await axios.post("dj-rest-auth/logout/");
+      // Setting the current user to null, and removing the token timestamp
       setCurrentUser(null);
       removeTokenTimestamp();
     } catch (err) {
+      // Logging any errors that occur during the sign out process
       console.log(err);
     }
   };
+
+  // Defining the icons that should be shown when the user is logged in
   const loggedInIcons = (
     <>
       <NavLink
@@ -43,9 +53,11 @@ const NavBar = () => {
         to={`/profiles/${currentUser?.profile_id}`}
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
-  </NavLink>
+      </NavLink>
     </>
   );
+
+  // Defining the icons that should be shown when the user is logged out
   const loggedOutIcons = (
     <>
       <NavLink
@@ -61,10 +73,11 @@ const NavBar = () => {
         activeClassName={styles.Active}
       >
         <i className="fas fa-user-plus"></i>Sign up
-  </NavLink>
+      </NavLink>
     </>
   );
 
+  // Rendering the Navbar component with relevant props and children
   return (
     <Navbar
       expanded={expanded}
@@ -73,15 +86,17 @@ const NavBar = () => {
       fixed="top"
     >
       <Container>
-          <Navbar.Brand>
-            <h1 className="ml-1" height="45">Task Manager</h1>
-          </Navbar.Brand>
+        <Navbar.Brand>
+          <h1 className="ml-1" height="45">Task Manager</h1>
+        </Navbar.Brand>
         {currentUser}
+        {/* Toggle button to expand/collapse the Navbar */}
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
           aria-controls="basic-navbar-nav"
         />
+        {/* Collapsable section of Navbar with links */}
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink

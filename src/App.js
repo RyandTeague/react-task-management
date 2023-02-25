@@ -1,6 +1,5 @@
 import styles from './App.module.css';
-import React, { useState, useEffect } from 'react';
-import { axiosReq, axiosRes } from './api/axiosDefaults';
+import React from 'react';
 import TaskPage from './pages/todos/TaskPage';
 import NavBar from "./components/NavBar";
 import Container from "react-bootstrap/Container";
@@ -9,8 +8,9 @@ import "./api/axiosDefaults";
 import SignUpForm from "./pages/auths/SignUpForm";
 import SignInForm from "./pages/auths/SignInForm";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
-import HomePage from './pages/auths/HomePage';
 import ToDo from './components/ToDo';
+import HomePage from './pages/auths/HomePage'
+import SignUpPage from './pages/auths/SignUpForm';
 
 function App() {
 	const currentUser = useCurrentUser();
@@ -42,7 +42,7 @@ function App() {
 			<Container className={styles.Main}>
 				<ErrorBoundary>
 					<Routes>
-						<Route path="/" element={<ToDo />} />
+						<Route path="/" element={<HomePage />} />
 						<Route path="/signin" element={<SignInForm />} />
 						<Route path="/signup" element={<SignUpForm />} />
 						<Route path="/tasks" element={<TaskPage />} />

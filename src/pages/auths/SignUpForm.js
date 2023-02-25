@@ -5,134 +5,141 @@ import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 
-import { Form, Button, Col, Row, Container, Alert } from "react-bootstrap";
-import { axiosReq } from "../../api/axiosDefaults"
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+import Alert from "react-bootstrap/Alert";
 
-const SignUpPage = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+import axios from "axios";
+import { useRedirect } from "../../hooks/useRedirect";
+
+const SignUpForm = () => {
+  useRedirect("loggedIn");
+  const [signUpData, setSignUpData] = useState({
     username: "",
-    email: "",
     password1: "",
     password2: "",
   });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const { username, password1, password2 } = signUpData;
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setSignUpData({
+      ...signUpData,
+      [event.target.name]: event.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const response = await axiosReq.post(
-        "/dj-rest-auth/registration/",
-        formData
-      );
-      setSuccess(true);
-      setError(null);
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-        setError(error.response.data);
-        setSuccess(false);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.log(error.request);
-        setError("Server is not responding. Please try again later.");
-        setSuccess(false);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
-        setError("Something went wrong. Please try again later.");
-        setSuccess(false);
-      }
+      await axios.post("/dj-rest-auth/registration/", signUpData);
+      navigate.push("/signin");
+    } catch (err) {
+      setErrors(err.response?.data);
     }
   };
 
-
   return (
-    <div className={styles.formWrapper}>
-      <Container>
-        <Row className={styles.formRow}>
-          <Col xs={12} sm={10} md={8} lg={6} xl={4}>
-            <h2 className={appStyles.title}>Sign Up</h2>
-            {error && <Alert variant="danger">{error && error.detail}</Alert>}
-            {success && (
-              <Alert variant="success">
-                Successfully registered! Please check your email to confirm
-                your account.
-              </Alert>
-            )}
+    <Row className={styles.Row}>
+      <Col className="my-auto py-2 p-md-2" md={6}>
+        <Container className={`${appStyles.Content} p-4 `}>
+          <h1 className={styles.Header}>sign up</h1>
+          <div onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              handleSubmit(event);
+            }
+          }}>
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formBasicUsername">
-                <Form.Label>Username</Form.Label>
+              <Form.Group controlId="username">
+                <Form.Label className="d-none">username</Form.Label>
                 <Form.Control
+                  className={styles.Input}
                   type="text"
-                  placeholder="Enter username"
+                  placeholder="Username"
                   name="username"
-                  value={formData.username}
+                  value={username}
                   onChange={handleChange}
-                  required
                 />
               </Form.Group>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+              {errors.username?.map((message, idx) => (
+                <Alert variant="warning" key={idx}>
+                  {message}
+                </Alert>
+              ))}
+
+              <Form.Group controlId="password1">
+                <Form.Label className="d-none">Password</Form.Label>
                 <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
+                  className={styles.Input}
                   type="password"
                   placeholder="Password"
                   name="password1"
-                  value={formData.password1}
+                  value={password1}
                   onChange={handleChange}
-                  required
                 />
               </Form.Group>
-              <Form.Group controlId="formBasicPasswordConfirm">
-                <Form.Label>Confirm Password</Form.Label>
+              {errors.password1?.map((message, idx) => (
+                <Alert key={idx} variant="warning">
+                  {message}
+                </Alert>
+              ))}
+
+              <Form.Group controlId="password2">
+                <Form.Label className="d-none">Confirm password</Form.Label>
                 <Form.Control
+                  className={styles.Input}
                   type="password"
-                  placeholder="Confirm Password"
+                  placeholder="Confirm password"
                   name="password2"
-                  value={formData.password2}
+                  value={password2}
                   onChange={handleChange}
-                  required
                 />
               </Form.Group>
+              {errors.password2?.map((message, idx) => (
+                <Alert key={idx} variant="warning">
+                  {message}
+                </Alert>
+              ))}
+
               <Button
-                variant="primary"
+                className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
                 type="submit"
-                className={btnStyles.primaryBtn}
               >
-                Sign Up
+                Sign up
               </Button>
+              {errors.non_field_errors?.map((message, idx) => (
+                <Alert key={idx} variant="warning" className="mt-3">
+                  {message}
+                </Alert>
+              ))}
             </Form>
-            <p className={styles.formBottom}>
-              Already have an account? <Link to="/signin">Sign In</Link>
-            </p>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </div>
+        </Container>
+
+        <Container className={`mt-3 ${appStyles.Content}`}>
+          <Link className={styles.Link} to="/signin">
+            Already have an account? <span>Sign in</span>
+          </Link>
+        </Container>
+      </Col>
+      <Col
+        md={6}
+        className={`my-auto d-none d-md-block p-2 ${styles.SignUpCol}`}
+      >
+        <Image
+          className={`${appStyles.FillerImage}`}
+          src={"https://codeinstitute.s3.amazonaws.com/AdvancedReact/hero2.jpg"}
+        />
+      </Col>
+    </Row>
   );
 };
 
-export default SignUpPage;
+export default SignUpForm;
