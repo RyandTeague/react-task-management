@@ -40,20 +40,20 @@ const NavBar = () => {
     <>
       <NavLink
         className={styles.NavLink}
-        activeClassName={styles.Active}
+        activeclassname={styles.Active}
         to="/tasks"
       >
-        <i className="fas fa-stream"></i>Feed
+        <i className="fas fa-stream"></i>Tasks
       </NavLink>
       <NavLink className={styles.NavLink} to="/" onClick={handleSignOut}>
         <i className="fas fa-sign-out-alt"></i>Sign out
       </NavLink>
-      <NavLink
+      {/*<NavLink
         className={styles.NavLink}
         to={`/profiles/${currentUser?.profile_id}`}
       >
         <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
-      </NavLink>
+  </NavLink>*/}
     </>
   );
 
@@ -62,7 +62,7 @@ const NavBar = () => {
     <>
       <NavLink
         className={styles.NavLink}
-        activeClassName={styles.Active}
+        activeclassname={styles.Active}
         to="/signin"
       >
         <i className="fas fa-sign-in-alt"></i>Sign in
@@ -70,12 +70,14 @@ const NavBar = () => {
       <NavLink
         to="/signup"
         className={styles.NavLink}
-        activeClassName={styles.Active}
+        activeclassname={styles.Active}
       >
         <i className="fas fa-user-plus"></i>Sign up
       </NavLink>
     </>
   );
+
+  { console.log(currentUser) }
 
   // Rendering the Navbar component with relevant props and children
   return (
@@ -87,9 +89,12 @@ const NavBar = () => {
     >
       <Container>
         <Navbar.Brand>
-          <h1 className="ml-1" height="45">Task Manager</h1>
+          <h1 className="ml-1" height="45">
+            TASK <span style={{ fontFamily: 'Bebas Neue', color: 'gold', fontWeight: 'bold', letterSpacing: '-0.05em' }}>Cruncher</span>
+          </h1>
         </Navbar.Brand>
-        {currentUser}
+
+        {/*{currentUser} */}
         {/* Toggle button to expand/collapse the Navbar */}
         <Navbar.Toggle
           ref={ref}
@@ -100,14 +105,12 @@ const NavBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink
-              exact
               className={styles.NavLink}
-              activeClassName={styles.Active}
+              activeclassname={styles.Active}
               to="/"
             >
               <i className="fas fa-home"></i>Home
             </NavLink>
-
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
         </Navbar.Collapse>

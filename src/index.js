@@ -5,12 +5,27 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import { CurrentUserProvider } from "./contexts/CurrentUserContext";
+import { ProfileDataProvider } from "./contexts/ProfileDataContext";
+
+// createRoot(document.getElementById("root")).render(
+// <React.StrictMode>
+// <Router>
+// <App />
+// </Router>
+// </React.StrictMode>
+// );
+
 createRoot(document.getElementById("root")).render(
-<React.StrictMode>
-<Router>
-<App />
-</Router>
-</React.StrictMode>
+    <Router>
+        <CurrentUserProvider>
+            <ProfileDataProvider>
+                <App />
+            </ProfileDataProvider>
+        </CurrentUserProvider>
+    </Router>
+
 );
+
 
 reportWebVitals();
