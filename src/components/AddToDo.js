@@ -26,35 +26,37 @@ const AddTodo = ({ addTodo }) => {
   };
 
   return (
-    <Form>
+    <Form style={{ backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }}>
       <Form.Group controlId='title'>
-        <Form.Label>Title</Form.Label>
-        <Form.Control type='text' placeholder='Enter Todo Title' onChange={e => setTitle(e.target.value)} />
+        <Form.Label style={{ color: "#c9c9c9" }}>Title</Form.Label>
+        <Form.Control type='text' placeholder='Enter Todo Title' onChange={e => setTitle(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
       </Form.Group>
 
       <Form.Group controlId='description'>
-        <Form.Label>Description</Form.Label>
-        <Form.Control type='text' placeholder='Enter Description' onChange={e => setDescription(e.target.value)} />
+        <Form.Label style={{ color: "#c9c9c9" }}>Description</Form.Label>
+        <Form.Control type='text' placeholder='Enter Description' onChange={e => setDescription(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
       </Form.Group>
 
       <Form.Group controlId='deadline'>
-        <Form.Label>Deadline</Form.Label>
+        <Form.Label style={{ color: "#c9c9c9" }}>Deadline</Form.Label>
         <DatePicker
           selected={deadline}
           onChange={date => setDeadline(date)}
           dateFormat="MMMM d, yyyy"
           disabled={noDeadline}
           minDate={new Date()} // set minimum date to the current date
+          style={{ marginBottom: "1rem", width: "100%" }}
         />
 
         <Form.Check
           type='checkbox'
           label='No deadline'
           onChange={e => setNoDeadline(e.target.checked)}
+          style={{ color: "#c9c9c9" }}
         />
       </Form.Group>
 
-      <Button variant='primary' type='submit' onClick={addTodoHandler}>Add Todo</Button>
+      <Button variant='primary' type='submit' onClick={addTodoHandler} style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Add Todo</Button>
     </Form>
   );
 };

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "../../styles/HomePage.module.css";
+import Image from "react-bootstrap/Image";
+import appStyles from "../../App.module.css";
+
+
 
 function HomePage() {
   return (
@@ -20,21 +24,33 @@ function HomePage() {
           </span>
         </h2>
 
-        <h3 style={{padding:"2rem"}}>Welcome to Task Cruncher where we remember your tasks so you don't have to!</h3>
+        <h3 style={{ padding: "2rem" }}>Welcome to Task Cruncher where we remember your tasks so you don't have to!</h3>
       </div>
-      <div className="body" style={{ gridRow: "3 / 5", gridColumn: "1 / 2", padding:"2rem" }}>
+      <div className="body" style={{ gridRow: "3 / 5", gridColumn: "1 / 2", padding: "2rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "2rem" }}>
           <div>
-            <h3>Column 1</h3>
-            <p>Enter your tasks</p>
+            <Image
+              className={`${appStyles.FillerImage}`}
+              src={"https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2372&q=80"}
+              style={{ borderRadius: "50%", border: "3px solid gold" }}  
+            />
+            <p style={{fontSize:"1.5rem"}}>Enter your tasks</p>
           </div>
           <div>
-            <h3>Column 2</h3>
-            <p>Set deadlines</p>
+          <Image
+              className={`${appStyles.FillerImage}`}
+              src={"https://images.unsplash.com/photo-1541480601022-2308c0f02487?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"}
+              style={{ borderRadius: "50%", border: "3px solid gold" }}
+            />
+            <p style={{fontSize:"1.5rem"}}>Set deadlines</p>
           </div>
           <div>
-            <h3>Column 3</h3>
-            <p>Tick your tasks off as you achieve your goals</p>
+          <Image
+              className={`${appStyles.FillerImage}`}
+              src={"https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"}
+              style={{ borderRadius: "50%", border: "3px solid gold"}}
+            />
+            <p style={{fontSize:"1.5rem"}}>Tick your tasks off as you achieve your goals</p>
           </div>
         </div>
       </div>

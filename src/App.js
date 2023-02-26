@@ -45,7 +45,7 @@ function App() {
 						<Route path="/" element={<HomePage />} />
 						<Route path="/signin" element={<SignInForm />} />
 						<Route path="/signup" element={<SignUpForm />} />
-						<Route path="/tasks" element={<TaskPage />} />
+						<Route path="/tasks" element={<ToDo />} />
 					</Routes>
 				</ErrorBoundary>
 			</Container>
