@@ -33,16 +33,25 @@ function SignInForm() {
   const history = useHistory();
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
       setCurrentUser(data.user);
       setTokenTimestamp(data);
-      history.goBack();
+      history.push("/");
     } catch (err) {
-      setErrors(err.response?.data);
+      if (err.response) {
+        console.error("Request failed with status code:", err.response.status);
+        console.error("Error response data:", err.response.data);
+        setErrors(err.response.data);
+      } else if (err.request) {
+        console.error("Request failed:", err.request);
+      } else {
+        console.error("Error:", err.message);
+      }
     }
   };
+  
 
   const handleChange = (event) => {
     setSignInData({
@@ -83,6 +92,11 @@ function SignInForm() {
                 className={styles.Input}
                 value={password}
                 onChange={handleChange}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
               />
             </Form.Group>
             {errors.password?.map((message, idx) => (
