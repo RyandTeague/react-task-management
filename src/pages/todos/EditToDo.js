@@ -6,7 +6,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Image from "react-bootstrap/Image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import styles from "../../styles/ToDoAddEdit.module.css";
 import appStyles from "../../App.module.css";
@@ -21,11 +22,11 @@ function EditToDo() {
   const [todoData, setToDoData] = useState({
     title: "",
     content: "",
-    image: "",
+    deadline: null,
+    completed: false,
   });
-  const { title, content, image } = todoData;
+  const { title, content, deadline, completed, } = todoData;
 
-  const imageInput = useRef(null);
   const history = useHistory();
   const { id } = useParams();
 
@@ -33,9 +34,11 @@ function EditToDo() {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(`/todos/${id}/`);
-        const { title, content, image, is_owner } = data;
+        const { title, content, deadline, completed, is_owner } = data;
 
-        is_owner ? setToDoData({ title, content, image }) : history.push("/");
+        is_owner
+          ? setToDoData({ title, content, deadline, completed })
+          : history.push("/");
       } catch (err) {
         // console.log(err);
       }
@@ -51,13 +54,29 @@ function EditToDo() {
     });
   };
 
-  const handleChangeImage = (event) => {
-    if (event.target.files.length) {
-      URL.revokeObjectURL(image);
-      setToDoData({
-        ...todoData,
-        image: URL.createObjectURL(event.target.files[0]),
-      });
+  const handleChangeDeadline = (date) => {
+    setToDoData({
+      ...todoData,
+      deadline: date,
+    });
+  };
+
+  const handleChangeCompleted = (event) => {
+    setToDoData({
+      ...todoData,
+      completed: event.target.checked,
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axiosReq.delete(`/todos/${id}/`);
+      history.push("/todos/");
+    } catch (err) {
+      // console.log(err);
+      if (err.response?.status !== 401) {
+        setErrors(err.response?.data);
+      }
     }
   };
 
@@ -67,10 +86,8 @@ function EditToDo() {
 
     formData.append("title", title);
     formData.append("content", content);
-
-    if (imageInput?.current?.files[0]) {
-      formData.append("image", imageInput.current.files[0]);
-    }
+    formData.append("deadline", deadline);
+    formData.append("completed", completed);
 
     try {
       await axiosReq.put(`/todos/${id}/`, formData);
@@ -93,12 +110,12 @@ function EditToDo() {
           value={title}
           onChange={handleChange}
         />
+        {errors?.title?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
+            {message}
+          </Alert>
+        ))}
       </Form.Group>
-      {errors?.title?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
 
       <Form.Group>
         <Form.Label>Content</Form.Label>
@@ -109,12 +126,37 @@ function EditToDo() {
           value={content}
           onChange={handleChange}
         />
+        {errors?.content?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
+            {message}
+          </Alert>
+        ))}
       </Form.Group>
-      {errors?.content?.map((message, idx) => (
-        <Alert variant="warning" key={idx}>
-          {message}
-        </Alert>
-      ))}
+
+      <Form.Group>
+        <Form.Label>Deadline</Form.Label>
+        <br />
+        <DatePicker
+          selected={deadline}
+          onChange={(date) =>
+            setToDoData({
+              ...todoData,
+              deadline: date,
+            })
+          }
+          className="form-control"
+          minDate={new Date()}
+          showYearDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={10}
+          placeholderText="Select a date"
+        />
+        {errors?.deadline?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
+            {message}
+          </Alert>
+        ))}
+      </Form.Group>
 
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
@@ -122,11 +164,19 @@ function EditToDo() {
       >
         cancel
       </Button>
+      <Button
+        className={`${btnStyles.Button} ${btnStyles.Red}`}
+        onClick={handleDelete}
+      >
+        Delete
+      </Button>
       <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
         save
       </Button>
+
     </div>
   );
+
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -135,31 +185,6 @@ function EditToDo() {
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
-            <Form.Group className="text-center">
-              <figure>
-                <Image className={appStyles.Image} src={image} rounded />
-              </figure>
-              <div>
-                <Form.Label
-                  className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                  htmlFor="image-upload"
-                >
-                  Change the image
-                </Form.Label>
-              </div>
-
-              <Form.File
-                id="image-upload"
-                accept="image/*"
-                onChange={handleChangeImage}
-                ref={imageInput}
-              />
-            </Form.Group>
-            {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
 
             <div className="d-md-none">{textFields}</div>
           </Container>

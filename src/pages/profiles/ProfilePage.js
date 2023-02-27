@@ -29,6 +29,7 @@ import { ProfileEditDropdown } from "../../components/MoreDropdown";
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [profileToDos, setProfileToDos] = useState({ results: [] });
+  const [userGroups, setUserGroups] = useState([]);
 
   const currentUser = useCurrentUser();
   const { id } = useParams();
@@ -42,16 +43,18 @@ function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ data: pageProfile }, { data: profileToDos }] =
+        const [{ data: pageProfile }, { data: profileToDos }, { data: groups }] =
           await Promise.all([
             axiosReq.get(`/profiles/${id}/`),
             axiosReq.get(`/todos/?owner__profile=${id}`),
+            axiosReq.get(`/groups/?members=${id}`),
           ]);
         setProfileData((prevState) => ({
           ...prevState,
           pageProfile: { results: [pageProfile] },
         }));
         setProfileToDos(profileToDos);
+        setUserGroups(groups.results);
         setHasLoaded(true);
       } catch (err) {
         // console.log(err);
@@ -109,9 +112,28 @@ function ProfilePage() {
         </Col>
         {profile?.content && <Col className="p-3">{profile.content}</Col>}
       </Row>
+      <hr />
+      <h3 className="text-center">Groups</h3>
+      <hr />
+      <Container>
+        <Row>
+          <Col>
+            <h5>Groups that {profile?.owner} is a member of:</h5>
+            {profile?.groups.length > 0 ? (
+              <ul>
+                {profile?.groups.map((group) => (
+                  <li key={group.id}>{group.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{profile?.owner} is not a member of any group.</p>
+            )}
+          </Col>
+        </Row>
+      </Container>
     </>
   );
-
+  
   const mainProfileToDos = (
     <>
       <hr />

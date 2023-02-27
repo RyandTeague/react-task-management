@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -27,9 +28,10 @@ function AddToDo() {
   const [todoData, setToDoData] = useState({
     title: "",
     content: "",
-    image: "",
+    deadline: null,
+    completed: false,
   });
-  const { title, content, image } = todoData;
+  const { title, content, deadline, completed } = todoData;
 
   const imageInput = useRef(null);
   const history = useHistory();
@@ -41,23 +43,22 @@ function AddToDo() {
     });
   };
 
-  const handleChangeImage = (event) => {
-    if (event.target.files.length) {
-      URL.revokeObjectURL(image);
-      setToDoData({
-        ...todoData,
-        image: URL.createObjectURL(event.target.files[0]),
-      });
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const todoData = {
+      title,
+      content,
+      deadline: null,
+      completed: false,
+    };
+
     const formData = new FormData();
 
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("image", imageInput.current.files[0]);
+    formData.append("deadline", null);
+    formData.append("completed", false);
 
     try {
       const { data } = await axiosReq.post("/todos/", formData);
@@ -69,6 +70,7 @@ function AddToDo() {
       }
     }
   };
+
 
   const textFields = (
     <div className="text-center">
@@ -103,15 +105,26 @@ function AddToDo() {
         </Alert>
       ))}
 
-      <Button
-        className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        onClick={() => history.goBack()}
-      >
-        cancel
-      </Button>
-      <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
-        create
-      </Button>
+      <Form.Group controlId='deadline'>
+        <Form.Label style={{ color: "#c9c9c9" }}>Deadline</Form.Label>
+        <DatePicker
+          selected={deadline}
+          onChange={handleChange}
+          dateFormat="MMMM d, yyyy"
+          minDate={new Date()} // set minimum date to the current date
+          style={{ marginBottom: "1rem", width: "100%" }}
+        />
+        </Form.Group>
+
+        <Button
+          className={`${btnStyles.Button} ${btnStyles.Blue}`}
+          onClick={() => history.goBack()}
+        >
+          cancel
+        </Button>
+        <Button className={`${btnStyles.Button} ${btnStyles.Blue}`} type="submit">
+          create
+        </Button>
     </div>
   );
 
@@ -122,46 +135,6 @@ function AddToDo() {
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
-            <Form.Group className="text-center">
-              {image ? (
-                <>
-                  <figure>
-                    <Image className={appStyles.Image} src={image} rounded />
-                  </figure>
-                  <div>
-                    <Form.Label
-                      className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                      htmlFor="image-upload"
-                    >
-                      Change the image
-                    </Form.Label>
-                  </div>
-                </>
-              ) : (
-                <Form.Label
-                  className="d-flex justify-content-center"
-                  htmlFor="image-upload"
-                >
-                  <Asset
-                    src={Upload}
-                    message="Click or tap to upload an image"
-                  />
-                </Form.Label>
-              )}
-
-              <Form.File
-                id="image-upload"
-                accept="image/*"
-                onChange={handleChangeImage}
-                ref={imageInput}
-              />
-            </Form.Group>
-            {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
-
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
