@@ -34,3 +34,10 @@
   color: #f8f8f8;
   text-decoration: underline;
 }
+
+.Logo {
+  background-color: gold;
+  border-radius: 50%;
+  background-size: 100%;
+  size: 90%;
+}

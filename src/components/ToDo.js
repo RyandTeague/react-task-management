@@ -1,14 +1,14 @@
 import React from "react";
-import styles from "../../styles/ToDo.module.css";
-import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import styles from "../styles/ToDo.module.css";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 import Card from "react-bootstrap/Card";
 import Media from "react-bootstrap/Media";
 
 import { Link, useHistory } from "react-router-dom";
-import Avatar from "../../components/Avatar";
-import { axiosRes } from "../../api/axiosDefaults";
-import { MoreDropdown } from "../../components/MoreDropdown";
+import Avatar from "../components/Avatar";
+import { axiosRes } from "../api/axiosDefaults";
+import { MoreDropdown } from "../components/MoreDropdown";
 
 const ToDo = (props) => {
   const {
@@ -20,7 +20,6 @@ const ToDo = (props) => {
     deadline,
     title,
     content,
-    image,
     updated_at,
     todoPage,
     setToDos,
@@ -62,9 +61,6 @@ const ToDo = (props) => {
           </div>
         </Media>
       </Card.Body>
-      <Link to={`/todos/${id}`}>
-        <Card.Img src={image} alt={title} />
-      </Link>
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}

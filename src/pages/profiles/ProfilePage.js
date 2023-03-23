@@ -5,12 +5,10 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 
 import Asset from "../../components/Asset";
-
+import ToDo from "../../components/ToDo";
 import styles from "../../styles/ProfilePage.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
-
-import PopularProfiles from "./PopularProfiles";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
@@ -20,17 +18,14 @@ import {
 } from "../../contexts/ProfileDataContext";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ToDo from "../todos/ToDo";
-import { fetchMoreData } from "../../utils/utils";
-import NoResults from "../../assets/no-results.png";
 import { ProfileEditDropdown } from "../../components/MoreDropdown";
+import GroupList from "./GroupList";
+import CreateGroup from "./Group"
 
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [profileToDos, setProfileToDos] = useState({ results: [] });
   const [userGroups, setUserGroups] = useState([]);
-
+  const [errors, setErrors] = useState({});  const [todos, setTodos] = useState([]); // initialize a state hook for todos 
   const currentUser = useCurrentUser();
   const { id } = useParams();
 
@@ -43,17 +38,15 @@ function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ data: pageProfile }, { data: profileToDos }, { data: groups }] =
+        const [{ data: pageProfile }, { data: groups }] =
           await Promise.all([
             axiosReq.get(`/profiles/${id}/`),
-            axiosReq.get(`/todos/?owner__profile=${id}`),
             axiosReq.get(`/groups/?members=${id}`),
           ]);
         setProfileData((prevState) => ({
           ...prevState,
           pageProfile: { results: [pageProfile] },
         }));
-        setProfileToDos(profileToDos);
         setUserGroups(groups.results);
         setHasLoaded(true);
       } catch (err) {
@@ -62,6 +55,23 @@ function ProfilePage() {
     };
     fetchData();
   }, [id, setProfileData]);
+
+  useEffect(() => { // useEffect hook to get todos on component mount
+    getTodos();
+  }, []);
+
+  const getTodos = async () => { // async function to get todos from the server 
+    try {
+      const response = await axiosReq.get( // make a GET request using the custom axios request function 
+        `https://task-backend.herokuapp.com/todos/?owner={currentUser.id}` // use the current user's ID to filter todos 
+      );
+      const { data } = response; // get the response data 
+      setTodos(data); // update the todos state with the response data
+      console.log(data); 
+    } catch (err) { // handle errors 
+      console.log(err);
+    }
+  };
 
   const mainProfile = (
     <>
@@ -134,47 +144,36 @@ function ProfilePage() {
     </>
   );
   
-  const mainProfileToDos = (
-    <>
-      <hr />
-      <p className="text-center">{profile?.owner}'s todos</p>
-      <hr />
-      {profileToDos.results.length ? (
-        <InfiniteScroll
-          children={profileToDos.results.map((todo) => (
-            <ToDo key={todo.id} {...todo} setToDos={setProfileToDos} />
-          ))}
-          dataLength={profileToDos.results.length}
-          loader={<Asset spinner />}
-          hasMore={!!profileToDos.next}
-          next={() => fetchMoreData(profileToDos, setProfileToDos)}
-        />
-      ) : (
-        <Asset
-          src={NoResults}
-          message={`No results found, ${profile?.owner} hasn't posted yet.`}
-        />
-      )}
-    </>
-  );
-
   return (
     <Row>
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <PopularProfiles mobile />
         <Container className={appStyles.Content}>
           {hasLoaded ? (
             <>
               {mainProfile}
-              {mainProfileToDos}
             </>
           ) : (
             <Asset spinner />
           )}
         </Container>
+        <GroupList />
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
-        <PopularProfiles />
+      {Array.isArray(todos) && todos.length > 0 ? (
+                todos.map((todo, index) => (
+                  !todo.completed && (
+                    <ToDo
+                      key={index}
+                      id={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                      deadline={todo.deadline}
+                    />
+                  )
+                ))
+              ) : (
+                <p>No todos found.</p>
+              )}
       </Col>
     </Row>
   );

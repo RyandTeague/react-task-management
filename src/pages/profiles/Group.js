@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { axiosReq } from '../../api/axiosDefaults';
+import { axiosReq, axiosRes } from '../../api/axiosDefaults';
 import { CurrentUserContext, useCurrentUser } from '../../contexts/CurrentUserContext';
 
 const CreateGroup = ({ group }) => {
@@ -12,7 +12,7 @@ const CreateGroup = ({ group }) => {
     const handleCreateGroup = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosReq.post('/api/groups/', {
+            const response = await axiosReq.post('https://task-backend.herokuapp.com/groups/', {
                 name: groupName,
                 members: [...members, currentUser.id], // add the creator ID to the members array
             });
@@ -26,7 +26,7 @@ const CreateGroup = ({ group }) => {
     const handleAddMember = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.patch(`/api/groups/${group.id}/`, {
+            const response = await axiosRes.patch(`https://task-backend.herokuapp.com/groups/${group.id}/`, {
                 members: [...members, newMember],
             });
             setMembers(response.data.members);
@@ -68,7 +68,7 @@ const CreateGroup = ({ group }) => {
                             )
                         }
                     >
-                        {users.map((user) => (
+                        {members.map((user) => (
                             <option key={user.id} value={user.id}>
                                 {user.username}
                             </option>
@@ -95,4 +95,5 @@ const CreateGroup = ({ group }) => {
         </div>
     );
 }
+
 export default CreateGroup

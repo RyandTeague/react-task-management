@@ -30,23 +30,14 @@ const NavBar = () => {
     }
   };
 
-  const addToDoIcon = (
-    <NavLink
-      className={styles.NavLink}
-      activeClassName={styles.Active}
-      to="/todos/create"
-    >
-      <i className="far fa-plus-square"></i>Add task
-    </NavLink>
-  );
   const loggedInIcons = (
     <>
       <NavLink
         className={styles.NavLink}
         activeClassName={styles.Active}
-        to="/feed"
+        to="/todos/create"
       >
-        <i className="fas fa-stream"></i>Feed
+        <i className="far fa-plus-square"></i>Add task
       </NavLink>
       <NavLink className={styles.NavLink} to="/" onClick={handleSignOut}>
         <i className="fas fa-sign-out-alt"></i>Sign out
@@ -55,7 +46,7 @@ const NavBar = () => {
         className={styles.NavLink}
         to={`/profiles/${currentUser?.profile_id}`}
       >
-        <Avatar src={currentUser?.profile_image} text="Profile" height={40} />
+        <i className="fas fa-user"></i>Profile
       </NavLink>
     </>
   );
@@ -88,7 +79,7 @@ const NavBar = () => {
       <Container>
         <NavLink to="/">
           <Navbar.Brand>
-            <img src={logo} alt="logo" height="45" />
+            <img className={styles.Logo} src={logo} alt="logo" height="55" />
           </Navbar.Brand>
         </NavLink>
         {/*{currentUser && addToDoIcon}*/}
