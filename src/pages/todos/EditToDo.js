@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import moment from "moment";
 import styles from "../../styles/ToDoAddEdit.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
@@ -26,7 +26,7 @@ function EditToDo() {
     completed: false,
   });
   const { title, content, deadline, completed, } = todoData;
-
+  console.log(deadline);
   const history = useHistory();
   const { id } = useParams();
 
@@ -36,16 +36,19 @@ function EditToDo() {
         const { data } = await axiosReq.get(`/todos/${id}/`);
         const { title, content, deadline, completed, is_owner } = data;
 
-        is_owner
-          ? setToDoData({ title, content, deadline, completed })
-          : history.push("/");
+        // is_owner
+        //   ? 
+          setToDoData({ title, content, deadline, completed })
+          // console.log(moment(deadline).format('MM/DD/YYYY'))
+         
+          // : history.push("/");
       } catch (err) {
         // console.log(err);
       }
     };
 
     handleMount();
-  }, [history, id]);
+  }, [id]);
 
   const handleChange = (event) => {
     setToDoData({
@@ -79,19 +82,20 @@ function EditToDo() {
       }
     }
   };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
+  const formData = new FormData();
+    // debugger
 
     formData.append("title", title);
     formData.append("content", content);
     formData.append("deadline", deadline);
     formData.append("completed", completed);
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+console.log(formData)
     try {
       await axiosReq.put(`/todos/${id}/`, formData);
-      history.push(`/todos/${id}`);
+      // history.push(`/todos/${id}`);
     } catch (err) {
       // console.log(err);
       if (err.response?.status !== 401) {
@@ -137,15 +141,17 @@ function EditToDo() {
         <Form.Label>Deadline</Form.Label>
         <br />
         <DatePicker
-          selected={deadline}
+          // selected={deadline}
+          // dateFormat="yyyy-MM-dd"
           onChange={(date) =>
             setToDoData({
               ...todoData,
-              deadline: date,
+              deadline: moment(date).format("YYYY-MM-DD HH:MM"),
             })
           }
           className="form-control"
           minDate={new Date()}
+          //  minDate={moment().toDate()}
           showYearDropdown
           scrollableYearDropdown
           yearDropdownItemNumber={10}

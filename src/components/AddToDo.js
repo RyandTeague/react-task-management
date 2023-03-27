@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+import Cookies from 'js-cookie';
 
 const AddTodo = ({ addTodo, user }) => {
   const [title, setTitle] = useState('');
@@ -14,8 +16,8 @@ const AddTodo = ({ addTodo, user }) => {
     addTodo({
       title,
       content,
-      completed: false,
-      deadline: deadline ? deadline.toISOString() : null,
+      deadline: deadline ? moment(deadline).format("YYYY-MM-DD HH:MM") : null,
+      completed: "false",
     });
 
     setTitle('');

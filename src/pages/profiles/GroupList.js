@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { CurrentUserContext, useCurrentUser } from '../../contexts/CurrentUserContext';
 import { axiosReq } from '../../api/axiosDefaults';
 
 const GroupList = () => {
   const [groups, setGroups] = useState([]);
-  const { currentUser } = useContext(CurrentUserContext);
-
+  // const { currentUser } = useContext(CurrentUserContext);
+ const currentUser = useCurrentUser();
+ console.log(groups)
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axiosReq.get('/api/groups/');
+        // I commented the jsx because this get api is not working
+        const response = await axiosReq.get('/groups/');
         setGroups(response.data.filter(group => group.members.some(member => member.id === currentUser.id)));
       } catch (error) {
         console.log(error);
@@ -23,7 +25,7 @@ const GroupList = () => {
   return (
     <div>
       <h2>Groups</h2>
-      {groups.map((group) => (
+      {/* {groups.map((group) => (
         <div key={group.id}>
           <h3>{group.name}</h3>
           <ul>
@@ -32,7 +34,7 @@ const GroupList = () => {
             ))}
           </ul>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };

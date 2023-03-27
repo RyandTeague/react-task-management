@@ -28,7 +28,7 @@ const ToDo = (props) => {
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
-
+console.log(id)
   const handleEdit = () => {
     history.push(`/todos/${id}/edit`);
   };
@@ -52,12 +52,12 @@ const ToDo = (props) => {
           </Link>
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
-            {is_owner && todoPage && (
+            {/* {is_owner && todoPage && ( */}
               <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
               />
-            )}
+            {/* )} */}
           </div>
         </Media>
       </Card.Body>

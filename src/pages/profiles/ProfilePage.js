@@ -23,38 +23,42 @@ import GroupList from "./GroupList";
 import CreateGroup from "./Group"
 
 function ProfilePage() {
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(true);
   const [userGroups, setUserGroups] = useState([]);
-  const [errors, setErrors] = useState({});  const [todos, setTodos] = useState([]); // initialize a state hook for todos 
+  const [errors, setErrors] = useState({});
+  const [todos, setTodos] = useState([]); // initialize a state hook for todos 
   const currentUser = useCurrentUser();
   const { id } = useParams();
 
   const { setProfileData, handleFollow, handleUnfollow } = useSetProfileData();
   const { pageProfile } = useProfileData();
 
-  const [profile] = pageProfile.results;
+  const [profile, setProfile] = useState({});
+  // const [profile] = pageProfile.results;
   const is_owner = currentUser?.username === profile?.owner;
-
+  // console.log(profile)
+  const fetchData = async () => {
+    try {
+      const pageProfile =
+        await Promise.all([
+          axiosReq.get(`/profiles/${id}/`),
+          // axiosReq.get(`/groups/?members=${id}`), //There is no api like this in backend
+        ]);
+      // console.log(pageProfile)
+      setProfile(pageProfile[0].data)
+      // setProfileData((prevState) => ({
+      //   ...prevState,
+      //   pageProfile: { results: [pageProfile] },
+      // }));
+      // setUserGroups(groups.results);
+      setHasLoaded(false);
+    } catch (err) {
+      // console.log(err);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [{ data: pageProfile }, { data: groups }] =
-          await Promise.all([
-            axiosReq.get(`/profiles/${id}/`),
-            axiosReq.get(`/groups/?members=${id}`),
-          ]);
-        setProfileData((prevState) => ({
-          ...prevState,
-          pageProfile: { results: [pageProfile] },
-        }));
-        setUserGroups(groups.results);
-        setHasLoaded(true);
-      } catch (err) {
-        // console.log(err);
-      }
-    };
     fetchData();
-  }, [id, setProfileData]);
+  }, []);
 
   useEffect(() => { // useEffect hook to get todos on component mount
     getTodos();
@@ -63,11 +67,11 @@ function ProfilePage() {
   const getTodos = async () => { // async function to get todos from the server 
     try {
       const response = await axiosReq.get( // make a GET request using the custom axios request function 
-        `https://task-backend.herokuapp.com/todos/?owner={currentUser.id}` // use the current user's ID to filter todos 
+        `https://task-backend.herokuapp.com/todos/?owner=${currentUser.id}` // use the current user's ID to filter todos 
       );
       const { data } = response; // get the response data 
-      setTodos(data); // update the todos state with the response data
-      console.log(data); 
+      setTodos(data.results); // update the todos state with the response data
+      // console.log(data); 
     } catch (err) { // handle errors 
       console.log(err);
     }
@@ -75,7 +79,7 @@ function ProfilePage() {
 
   const mainProfile = (
     <>
-      {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
+      {/* {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />} */}
       <Row noGutters className="px-3 text-center">
         <Col lg={3} className="text-lg-left">
           <Image
@@ -122,10 +126,7 @@ function ProfilePage() {
         </Col>
         {profile?.content && <Col className="p-3">{profile.content}</Col>}
       </Row>
-      <hr />
-      <h3 className="text-center">Groups</h3>
-      <hr />
-      <Container>
+      {/* <Container>
         <Row>
           <Col>
             <h5>Groups that {profile?.owner} is a member of:</h5>
@@ -140,40 +141,46 @@ function ProfilePage() {
             )}
           </Col>
         </Row>
-      </Container>
+      </Container> */}
     </>
   );
-  
+
   return (
     <Row>
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <Container className={appStyles.Content}>
           {hasLoaded ? (
+            <Asset spinner />
+
+          ) : (
             <>
               {mainProfile}
             </>
-          ) : (
-            <Asset spinner />
           )}
         </Container>
-        <GroupList />
+        <Container className={appStyles.Content}>
+          
+          <CreateGroup />
+        </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
-      {Array.isArray(todos) && todos.length > 0 ? (
-                todos.map((todo, index) => (
-                  !todo.completed && (
-                    <ToDo
-                      key={index}
-                      id={todo.id}
-                      title={todo.title}
-                      description={todo.description}
-                      deadline={todo.deadline}
-                    />
-                  )
-                ))
-              ) : (
-                <p>No todos found.</p>
-              )}
+        <Container className={appStyles.Content}>
+          {Array.isArray(todos) && todos.length > 0 ? (
+            todos.map((todo, index) => (
+              todo.completed && (
+                <ToDo
+                  key={index}
+                  id={todo.id}
+                  title={todo.title}
+                  content={todo.content}
+                  deadline={todo.deadline}
+                />
+              )
+            ))
+          ) : (
+            <p>No todos found.</p>
+          )}
+        </Container>
       </Col>
     </Row>
   );

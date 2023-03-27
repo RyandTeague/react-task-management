@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { axiosReq, axiosRes } from '../../api/axiosDefaults';
 import { CurrentUserContext, useCurrentUser } from '../../contexts/CurrentUserContext';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 const CreateGroup = ({ group }) => {
     const currentUser = useCurrentUser();
@@ -8,11 +10,12 @@ const CreateGroup = ({ group }) => {
     const [members, setMembers] = useState([]);
     const [newMember, setNewMember] = useState('');
     const [message, setMessage] = useState('');
-
+    const [profile, setProfile] = useState([]);
+    // console.log(profile);
     const handleCreateGroup = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosReq.post('https://task-backend.herokuapp.com/groups/', {
+            const response = await axiosReq.post('http://127.0.0.1:8000/groups/', {
                 name: groupName,
                 members: [...members, currentUser.id], // add the creator ID to the members array
             });
@@ -21,12 +24,12 @@ const CreateGroup = ({ group }) => {
             setMessage('There was a problem creating the group.');
         }
     };
-    
+
 
     const handleAddMember = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosRes.patch(`https://task-backend.herokuapp.com/groups/${group.id}/`, {
+            const response = await axiosRes.patch(`http://127.0.0.1:8000/groups/${group.id}/`, {
                 members: [...members, newMember],
             });
             setMembers(response.data.members);
@@ -36,64 +39,54 @@ const CreateGroup = ({ group }) => {
             setMessage('There was a problem adding the member.');
         }
     };
-
+    const fetchData = async () => {
+        try {
+            const pageProfile =
+                await Promise.all([
+                    axiosReq.get(`/profiles/`),
+                ]);
+            setProfile(pageProfile[0].data.results)
+        } catch (err) {
+            // console.log(err);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, []);
     return (
         <div>
-            <h2>{group.name}</h2>
-            <ul>
-                {group.members.map((member) => (
-                    <li key={member.id}>{member.username}</li>
-                ))}
-            </ul>
-            <form onSubmit={handleCreateGroup}>
-                <label>
-                    Group name:
-                    <input
-                        type="text"
-                        value={groupName}
-                        onChange={(e) => setGroupName(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Members:
-                    <select
-                        multiple
-                        value={members}
-                        onChange={(e) =>
-                            setMembers(
-                                Array.from(
-                                    e.target.selectedOptions,
-                                    (option) => option.value
-                                )
-                            )
-                        }
-                    >
-                        {members.map((user) => (
+            <h2>Create Group</h2>
+            <Form style={{ backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }} onSubmit={handleCreateGroup}>
+                <Form.Group controlId='groupName'>
+                    <Form.Label style={{ color: "#c9c9c9" }}>Group name</Form.Label>
+                    <Form.Control type='text' placeholder='Enter Group Name' onChange={(e) => setGroupName(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
+                </Form.Group>
+                <Form.Group controlId='members'>
+                    <Form.Label style={{ color: "#c9c9c9" }}>Members</Form.Label>
+                    <Form.Control as='select' multiple value={members} onChange={(e) => setMembers(Array.from(e.target.selectedOptions, (option) => option.value))} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }}>
+                        {profile.map((user) => (
                             <option key={user.id} value={user.id}>
-                                {user.username}
+                                {user.owner}
                             </option>
                         ))}
-                    </select>
-                </label>
-                <button type="submit">Create group</button>
-            </form>
+                    </Form.Control>
+                </Form.Group>
+                <Button type='submit' style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Create group</Button>
+            </Form>
             {message && <p>{message}</p>}
             <hr />
             <h3>Add member</h3>
-            <form onSubmit={handleAddMember}>
-                <label>
-                    Search for a user:
-                    <input
-                        type="text"
-                        value={newMember}
-                        onChange={(e) => setNewMember(e.target.value)}
-                    />
-                </label>
-                <button type="submit">Add member</button>
-            </form>
+            <Form style={{ backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }} onSubmit={handleAddMember}>
+                <Form.Group controlId='newMember'>
+                    <Form.Label style={{ color: "#c9c9c9" }}>Search for a user</Form.Label>
+                    <Form.Control type='text' placeholder='Enter Username' onChange={(e) => setNewMember(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
+                </Form.Group>
+                <Button type='submit' style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Add member</Button>
+            </Form>
             {message && <p>{message}</p>}
         </div>
     );
+
 }
 
 export default CreateGroup
