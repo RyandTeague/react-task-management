@@ -166,7 +166,7 @@ function ProfilePage() {
           <CreateGroup />
         </Container>
       </Col>
-      <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
+      <Col lg={4} xs={12} className="p-0 p-lg-2">
         <Container className={appStyles.Content}>
           {Array.isArray(todos) && todos.length > 0 ? (
             todos.map((todo, index) => (

@@ -28,7 +28,7 @@ const ToDo = (props) => {
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
   const history = useHistory();
-console.log(id)
+// console.log(id)
   const handleEdit = () => {
     history.push(`/todos/${id}/edit`);
   };
