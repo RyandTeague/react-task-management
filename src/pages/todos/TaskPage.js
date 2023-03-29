@@ -94,7 +94,7 @@ const TaskPage = () => {
       // console.log()
       await axiosReq
         .post(
-          "/todos/",
+          "https://task-backend.herokuapp.com/todos/",
           // axios.defaults.headers.post['Cookie'] = currentTokken,
           newTodo,
           config

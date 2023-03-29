@@ -47,23 +47,21 @@ const ToDo = (props) => {
       <Card.Body>
         <Media className="align-items-center justify-content-between">
           <Link to={`/profiles/${profile_id}`}>
-            <Avatar src={profile_image} height={55} />
             {owner}
           </Link>
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
-            {/* {is_owner && todoPage && ( */}
               <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
               />
-            {/* )} */}
           </div>
         </Media>
       </Card.Body>
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
+        {deadline && <Card.Text>{deadline}</Card.Text>}
       </Card.Body>
     </Card>
   );
