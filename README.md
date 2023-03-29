@@ -5,7 +5,7 @@
 I want to create a task management APP. USERS Can Share tasks with other users.
 Feature List:
 -BASIC 
-    -CREATE A TASK THAT CANDLE EDITED AND Deleted. 
+    -CREATE A TASK THAT CAN be EDITED AND Deleted. 
     Set task Deadline,
 -Additional features
     -Set task from SET-→ in Progress → done 
@@ -168,6 +168,15 @@ class UserAdmin(OriginalUserAdmin):
     - User stories were created and tracked using GitHub's projects functionality:
     ![Screenshot of github projects page with user stories](media/images/userstories.jpg)
 
+### UX Design
+
+- 
+    - 
+    ![Landing page design](media/images/Landing%20Page.png)
+    - 
+    ![Task page design](media/images/Task%20page.png)
+    - 
+    ![Profile page design](media/images/profile.png)
 ## Testing
 
 ### Validator Testing
@@ -384,7 +393,5 @@ class LogInTest(TestCase):
 ### Code
 
 - Tutorials I followed to create the basis of this code are as follows:
-    -https://www.thetechplatform.com/post/develop-an-hotel-management-system-with-django
-- https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwiMw-7868r7AhVjxDgGHUkHC98QwqsBegQIChAF&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DrHZwE1AK1h8&usg=AOvVaw3cyttpzMTyD7QJFg-lzosP
-- https://blog.devgenius.io/django-tutorial-on-how-to-create-a-booking-system-for-a-health-clinic-9b1920fc2b78
+    -https://www.youtube.com/watch?v=W9BjUoot2Eo 
 

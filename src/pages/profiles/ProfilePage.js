@@ -36,7 +36,7 @@ function ProfilePage() {
   const [profile, setProfile] = useState({});
   // const [profile] = pageProfile.results;
   const is_owner = currentUser?.username === profile?.owner;
-  // console.log(profile)
+  console.log(todos)
   const fetchData = async () => {
     try {
       const pageProfile =
@@ -67,7 +67,7 @@ function ProfilePage() {
   const getTodos = async () => { // async function to get todos from the server 
     try {
       const response = await axiosReq.get( // make a GET request using the custom axios request function 
-        `https://task-backend.herokuapp.com/todos/?owner=${currentUser.id}` // use the current user's ID to filter todos 
+        `https://task-backend.herokuapp.com/todos/?owner=${id}` // use the current user's ID to filter todos 
       );
       const { data } = response; // get the response data 
       setTodos(data.results); // update the todos state with the response data
@@ -126,6 +126,9 @@ function ProfilePage() {
         </Col>
         {profile?.content && <Col className="p-3">{profile.content}</Col>}
       </Row>
+      <hr />
+      <h3 className="text-center">Groups</h3>
+      <hr />
       {/* <Container>
         <Row>
           <Col>
@@ -159,7 +162,7 @@ function ProfilePage() {
           )}
         </Container>
         <Container className={appStyles.Content}>
-          
+          <GroupList />
           <CreateGroup />
         </Container>
       </Col>
@@ -167,15 +170,15 @@ function ProfilePage() {
         <Container className={appStyles.Content}>
           {Array.isArray(todos) && todos.length > 0 ? (
             todos.map((todo, index) => (
-              todo.completed && (
-                <ToDo
-                  key={index}
-                  id={todo.id}
-                  title={todo.title}
-                  content={todo.content}
-                  deadline={todo.deadline}
-                />
-              )
+              // todo.completed && (
+              <ToDo
+                key={index}
+                id={todo.id}
+                title={todo.title}
+                content={todo.content}
+                deadline={todo.deadline}
+              />
+
             ))
           ) : (
             <p>No todos found.</p>

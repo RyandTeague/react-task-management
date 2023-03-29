@@ -15,7 +15,7 @@ const CreateGroup = ({ group }) => {
     const handleCreateGroup = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosReq.post('http://127.0.0.1:8000/groups/', {
+            const response = await axiosReq.post('/groups/', {
                 name: groupName,
                 members: [...members, currentUser.id], // add the creator ID to the members array
             });
@@ -29,7 +29,7 @@ const CreateGroup = ({ group }) => {
     const handleAddMember = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosRes.patch(`http://127.0.0.1:8000/groups/${group.id}/`, {
+            const response = await axiosRes.patch(`/groups/${group.id}/`, {
                 members: [...members, newMember],
             });
             setMembers(response.data.members);
@@ -61,16 +61,6 @@ const CreateGroup = ({ group }) => {
                     <Form.Label style={{ color: "#c9c9c9" }}>Group name</Form.Label>
                     <Form.Control type='text' placeholder='Enter Group Name' onChange={(e) => setGroupName(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
                 </Form.Group>
-                <Form.Group controlId='members'>
-                    <Form.Label style={{ color: "#c9c9c9" }}>Members</Form.Label>
-                    <Form.Control as='select' multiple value={members} onChange={(e) => setMembers(Array.from(e.target.selectedOptions, (option) => option.value))} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }}>
-                        {profile.map((user) => (
-                            <option key={user.id} value={user.id}>
-                                {user.owner}
-                            </option>
-                        ))}
-                    </Form.Control>
-                </Form.Group>
                 <Button type='submit' style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Create group</Button>
             </Form>
             {message && <p>{message}</p>}
@@ -86,6 +76,7 @@ const CreateGroup = ({ group }) => {
             {message && <p>{message}</p>}
         </div>
     );
+
 
 }
 
