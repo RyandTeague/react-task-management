@@ -41,13 +41,7 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
 
 ### Profiles
 
-- This authenitication uses the default django user model.
-- There is one form in this app which allows users to fill in the fields for the user model.
-- There are three views associated with the authenitication app:
-    - login_user takes the post from login.html and authenticates the username and password submited.
-    if the user exists then the user is redirected to their user-panel, otherwise they are redirected back to the login page.
-    - logout_user calls the logout function and redirects the user to the landing page.
-    - register_user takes the post from RegisterUserForm form and checks if the form is valid then if successful it also calls the log in user function and redirects the user to the landing page
+- 
 
 ### Tasks
 
@@ -264,18 +258,36 @@ class LogInTest(TestCase):
 
 ## Deployment
 
-- The site was deployed using Code Institute's mock terminal for Heorku. The steps to deploy are as follows
+- The site was deployed on Heorku. The steps to deploy are as follows
     - Create a new Heroku App
-    - Set the buildbacks to Python and NodeJS in that order
-    - Link the heroku app to a PostgreSQL database hosted on https://www.elephantsql.com
     - Link the heroku app to the repository
     - Click on Deploy
 
+- This frontend APP connects to a backend API. The steps to connect the two are as follows
+    - In the DRF settings, add code to allow different hosts depending on whether the backend is in development mode or not:
+    ```
+    if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN')
+    ]
+
+    if 'CLIENT_ORIGIN_DEV' in os.environ:
+    extracted_url = re.match(
+        r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
+    ).group(0)
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
+    ]
+    ```
+    - Both of these code snippets get URLs that are in the config vars on Heroku for the deployed backend.
+    - When making Https requests to the backend use Axios and link to the deployed backend: https://task-backend.herokuapp.com/ .
+
 ## Credits
 
-- To complete this project I used Code Institute student template: [gitpod full template](https://github.com/Code-Institute-Org/python-essentials-template)
-
 - Bootstrap framework was used to help write the html and css in the templates.
+
+- images:
+    - 
 
 ### Code
 
