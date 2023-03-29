@@ -8,7 +8,8 @@ import { axiosReq } from "../../api/axiosDefaults";
 
 
 function HomePage() {
-  const [todos, setTodos] = useState([]); // initialize a state hook for todos 
+  const [todos, setTodos] = useState([]); // initialize a state hook for todos
+  const [loader, setLoader] = useState(true);
 
   const getTodos = async () => {
     // async function to get todos from the server
@@ -22,9 +23,7 @@ function HomePage() {
         data: { results },
       } = response; // get the response data
       // console.log(results)
-      const completedTodos = results.filter(todo => todo.completed).length;
-      const updatedData = { ...results, completedTodos };
-      setTodos(updatedData);
+      setTodos(results); // update the todos state with the response data
     } catch (err) {
       // handle errors
       console.log(err);
@@ -34,7 +33,8 @@ function HomePage() {
   useEffect(() => {
     // useEffect hook to get todos on component mount
     getTodos();
-  }, [1]);
+    setLoader(false);
+  }, [loader]);
 
   return (
     <div className="grid-container" style={{ textAlign: "center" }}>

@@ -29,7 +29,7 @@ const TaskPage = () => {
       // console.log('test') // if this is deleted the tasks dissapear
       const response = await axiosReq.get(
         // make a GET request using the custom axios request function
-        `https://task-backend.herokuapp.com//todos/?profile_id=${currentUser.profile_id}` // use the current user's ID to filter todos
+        `https://task-backend.herokuapp.com/todos/?profile_id=${currentUser.profile_id}` // use the current user's ID to filter todos
       );
       const {
         data: { results },
