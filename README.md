@@ -45,9 +45,53 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
 
 ### Tasks
 
-- 
-## Groups
+- AddToDo component
+    - 
 
+- ToDo List component
+    - 
+
+### Groups
+- CreateToDo component
+    - 
+
+- GroupList component
+
+### Asset
+- 
+
+## React
+
+- Overview of React Architecture
+    - React is a JavaScript library for building user interfaces. Its architecture is based on a set of key concepts, including components, props, and state.
+
+    Components are the building blocks of React applications. They are reusable pieces of UI that can be composed to create complex user interfaces. Components can be functional or class-based, and they can be customized with props and state.
+
+    Props, short for properties, are a way to pass data from one component to another. They are immutable, meaning that they cannot be changed once they are set. Props are used to customize the behavior or appearance of components and can be accessed as properties of the component's props object.
+
+    State is a way to manage data within a component. Unlike props, state can be changed during the lifetime of a component, and any changes to state will trigger a re-render of the component. State is used to manage user input, control component behavior, or reflect changes in the application's data.
+
+    React applications are typically organized into a tree-like hierarchy of components. Each component is responsible for rendering a specific part of the UI and can contain other components as children. The component hierarchy can be represented as a virtual DOM, which is a lightweight copy of the actual DOM that React uses to update the UI efficiently.
+
+    React's architecture emphasizes modularity, reusability, and declarative programming. By breaking the UI into smaller, reusable components and managing data through props and state, React enables developers to build complex user interfaces that are easier to maintain and scale.
+
+- Advantages of using React
+    - Reusing components in a React application offers a number of benefits, including:
+
+        1. Improving code organization: By breaking the UI into smaller, reusable components, developers can more easily organize and structure their code. Components can be developed and tested in isolation, making it easier to maintain and update the codebase over time.
+
+        2. Reducing duplication: Reusing components can help reduce code duplication, as developers can write a single component that can be used in multiple parts of the application. This reduces the amount of code that needs to be written, tested, and maintained, resulting in a more efficient and streamlined codebase.
+
+        3. Promoting consistency in the user interface: Reusing components can help ensure a consistent user interface across the application. By using the same components with consistent behavior and styling, developers can ensure that the user experience is consistent and predictable, reducing confusion and improving usability.
+
+        4. Enhancing scalability: Reusing components can help make an application more scalable, as developers can add new functionality or features by composing existing components rather than writing new code from scratch. This can help reduce the time and cost of development, as well as improve the maintainability of the codebase.
+
+        5. Facilitating collaboration: Reusing components can help facilitate collaboration among developers, as they can share components and work together to develop and improve them. This can help improve code quality, reduce errors, and accelerate development timelines.
+
+        - Overall, reusing components in a React application can help improve code quality, reduce development time and costs, and enhance the user experience. By leveraging the modularity and reusability of React components, developers can build more efficient, maintainable, and scalable applications.
+
+- Disadvantages of using React
+    - 
 
 ### UX Design
 

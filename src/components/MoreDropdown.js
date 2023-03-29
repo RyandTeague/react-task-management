@@ -1,10 +1,12 @@
+// Importing required modules and components
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import styles from "../styles/MoreDropdown.module.css";
 import { useHistory } from "react-router";
 
-// The forwardRef is important!!
-// Dropdown needs access to the DOM node in order to position the Menu
+// Defining a component called ThreeDots, which is a forwardRef
+// This component will be used to create the dropdown toggle button
+// The ref attribute is used to get access to the DOM node, which is needed to position the menu
 const ThreeDots = React.forwardRef(({ onClick }, ref) => (
   <i
     className="fas fa-ellipsis-v"
@@ -16,11 +18,15 @@ const ThreeDots = React.forwardRef(({ onClick }, ref) => (
   />
 ));
 
+// Defining a component called MoreDropdown, which is a Dropdown component from react-bootstrap
+// This component receives two props, handleEdit and handleDelete, which are functions that will be called when the corresponding dropdown items are clicked
 export const MoreDropdown = ({ handleEdit, handleDelete }) => {
   return (
     <Dropdown className="ml-auto" drop="left">
+      {/* Using the ThreeDots component as the dropdown toggle */}
       <Dropdown.Toggle as={ThreeDots} />
 
+      {/* The Dropdown.Menu component contains the dropdown items */}
       <Dropdown.Menu
         className="text-center"
         popperConfig={{ strategy: "fixed" }}
@@ -44,27 +50,37 @@ export const MoreDropdown = ({ handleEdit, handleDelete }) => {
   );
 };
 
+// Defining a component called ProfileEditDropdown, which is a Dropdown component from react-bootstrap
+// This component receives a prop called id, which will be used to construct the URLs for the dropdown items
 export const ProfileEditDropdown = ({ id }) => {
+  // Using the useHistory hook from react-router to get access to the browser history object
   const history = useHistory();
+
   return (
     <Dropdown className={`ml-auto px-3 ${styles.Absolute}`} drop="left">
+      {/* Using the ThreeDots component as the dropdown toggle */}
       <Dropdown.Toggle as={ThreeDots} />
+
+      {/* The Dropdown.Menu component contains the dropdown items */}
       <Dropdown.Menu>
         <Dropdown.Item
-          onClick={() => history.push(`/profiles/${id}/edit`)}
+          // Using the history object to navigate to the edit profile page for the user with the given id
+          onClick={() => history.push(`https://task-backend.herokuapp.com/profiles/${id}/edit`)}
           aria-label="edit-profile"
         >
           <i className="fas fa-edit" /> edit profile
         </Dropdown.Item>
         <Dropdown.Item
-          onClick={() => history.push(`/profiles/${id}/edit/username`)}
+          // Using the history object to navigate to the edit username page for the user with the given id
+          onClick={() => history.push(`https://task-backend.herokuapp.com/profiles/${id}/edit/username`)}
           aria-label="edit-username"
         >
           <i className="far fa-id-card" />
           change username
         </Dropdown.Item>
         <Dropdown.Item
-          onClick={() => history.push(`/profiles/${id}/edit/password`)}
+          // Using the history object to navigate to the edit password page for the user with the given id
+          onClick={() => history.push(`https://task-backend.herokuapp.com/profiles/${id}/edit/password`)}
           aria-label="edit-password"
         >
           <i className="fas fa-key" />

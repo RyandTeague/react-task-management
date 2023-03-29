@@ -129,22 +129,6 @@ function ProfilePage() {
       <hr />
       <h3 className="text-center">Groups</h3>
       <hr />
-      {/* <Container>
-        <Row>
-          <Col>
-            <h5>Groups that {profile?.owner} is a member of:</h5>
-            {profile?.groups.length > 0 ? (
-              <ul>
-                {profile?.groups.map((group) => (
-                  <li key={group.id}>{group.name}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>{profile?.owner} is not a member of any group.</p>
-            )}
-          </Col>
-        </Row>
-      </Container> */}
     </>
   );
 
