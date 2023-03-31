@@ -289,7 +289,7 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     The permission_classes attribute sets the list of permission classes that determine who can access the view. In this case, IsOwnerOrReadOnly allows only the owner of the task to update or delete it, while all users can view the details of the task.
 
 ### Groups
-- CreateToDo component
+- Create Group component
     - Reuses
         - The Create group function is currently only used in the ProfilePage but it could be reused as a part of group management page
 
@@ -418,6 +418,9 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     - With the profile Page design I knew I wanted the Todo's to be listed here again so I would reuse that component. I also needed to create components for group creation and viewing.
     ![Profile page design](media/images/profile.png)
 
+- Styling 
+    - When deciding how the website was going to be styled I wanted to go with dark colours that were reminiscent of other website's night mode. Due to wanting to focus on the function of the website I decided that apart from the landing page I didn't want there to be many graphics. With the dark colours I then chose contrasting colours for elements I wanted to draw the user's eye to such as buttons or titles of components. So I used a blue and yellow as that is a complementary color harmony so they contrast with each other but it isnt unpleasant to see them together.
+
 ## Testing
 
 ### Validator Testing
@@ -437,19 +440,92 @@ Site was tested to work on Google chrome, firefox, microsoft edge and internet e
 
 ### Manual Testing
 
-#### Booking
+#### Backend
+- For testing the backend I used Postman to test the endpoints of the API, Them being:
+    - '/todos/'
+        - Tested get 200 status code, expected: pass, result: pass
+        - 
+    - '/todos/<id>'
+        - Tested get 200 status code, expected: pass, result: pass
+        - 
+    - '/groups/'
+        - Tested get 200 status code with Authentication, expected: pass, result: pass
+        - Tested get 200 status code without Authentication, expected: fail, result: fail
+    - '/groups/<id>'
+        - Tested get 200 status code with Authentication, expected: pass, result: pass
+        - Tested get 200 status code without Authentication, expected: fail, result: fail
 
-```
+- I manually tested the funcionailty of the Todos and the groups APIs
 
+    - Todos list
+        - GET
+            - I tested whether the to do list can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
+            and that was true
+        - POST
+            - When Unauthorized there is no form for posting a new todo, using postman I attempted to create a new to do and got back a 403 Forbidden response.
+            - When authorised I can post a new todo, but the Title field must be filled in or a HTTP 400 Bad Request is returned
+    - Todos Detail ('/todos/1')
+        - GET
+            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
+            and that was true
+        - POST
+            - This view does not allow post http requests, returned status code 400 on Postman
+        - PATCH
+            - When logged in as the user that created the todo there is a form for PATCH-ing the todo item. other users are not able to send PATCH requests, neither are anonymous users. 403 Forbidden
+        - DELETE
+            - Same as above only the authorized user who is the 'owner' of the todo can delete a todo. 403 Forbidden
 
-```
+    - Groups list
+        - GET
+            - The list of groups can only be viewed by an authorized user who is either the owner of the group or a member as defined in this code:
+            ```
+            def get(self, request, *args, **kwargs):
+            """Return a list of groups owned by the current user."""
+            if request.user.is_anonymous:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            groups = self.get_queryset().filter(
+            Q(owner=request.user) | Q(members=request.user)
+            ).distinct()
+            serializer = self.get_serializer(groups, many=True)
+            return Response(serializer.data)
+            ```
+            - anonymous users get a 404 not found error message and other authorized members get a 200 but can't see unaffiliated groups.
+        - POST
+            - When Authorized I can post a new todo and the creator is automatically added as a member
 
-#### Authentication
+    - Groups Detail
+        - GET
+            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
+            but when logging out on the page the anonymous user was not able to access the view:
+                - "Exception Type: TypeError at /groups/1/
+                Exception Value: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7fd74a985f40>."
+        - POST
+            - This view does not allow post http requests, returned status code 400 on Postman
+        - PATCH
+            - When logged in as the user that created the group there is a form for PATCH-ing the todo item. other users are not able to send PATCH requests, neither are anonymous users. 403 Forbidden
+        - DELETE
+            - Same as above only the authorized user who is the 'owner' of the group can delete a group. 403 Forbidden
 
-```
+#### Frontend
 
-```
+    - I manually tests the functionality of the Frontend app, checking for succesful data manipulation of Tasks and Groups:
+        -Tasks
+            - Creating a task on the ToDo page works successfully, the task shows up in the deployed heroku API. The Title is currently the only field that cannot be left blank and it correctly throws up a message when attempted. The newly created task then shows up in the ToDo list. ToDo list items that arn't associated with the current user do not appear.
+            - With the todo list component on the TaskPage and the profile page the delete button allows the user to delete the todo succesfully from the backend.
+            - Pressing the edit button should open a modal that allows the user to change the title, content, or deadline data of the task and then save it. when tested this succesfully updates the backend data.
+            - On the Profile page and landing page I GET todo data and count the number of todos. I expect the profile page to count the todos with the currently logged in user as owner and the Landing page to count the total todos created. Both numbers are correct.
 
+        - Groups
+            - When Creating a group on the profile page, I tested whether you could leave the name of the group blank expecting an error message and it passed.
+            - When creating a group with no members, I expected the group to be created with only the currently logged in user as the sole member, which was correct
+            - With the group list i expected to be able to see both groups that had been created by the user but also groups created by other users that the current user was a member of, which is correct.
+            - When removing or adding a member to the group I expected the Backend API to reflect this change, And this was correct.
+
+        - Authentication
+            - Registering a new account works successfully. Inputting a username that already exists, no username, passwords that dont match, or commonly used passwords ('password') throws up the correct error messages.
+            - Logging in works correctly, inputting invalid username or passwords throws up the corrrect error message.
+            - I expected the NavBar to change when logged in as a user, and this was correct.
+            - I expected 404 errors to be thrown up when trying to access urls that require authorization, eg. taskpage, profilepage etc. , The pages loaded but the user is unable to create a new todo or group, getting a status code 401 unauthorized response.
 ## Deployment
 
 - The site was deployed on Heorku. The steps to deploy are as follows
