@@ -21,11 +21,11 @@ export const CurrentUserProvider = ({ children }) => {
 // console.log(currentTokken)
   const handleMount = async () => {
     try {
-      const { data } = await axiosRes.get("dj-rest-auth/user/");
+      const { data } = await axios.get("dj-rest-auth/user/");
       setCurrentUser(data);
-      // setTokken(data.access_token)
+      setTokken(data.access_token);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 

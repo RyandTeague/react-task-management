@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CurrentUserContext, useCurrentUser } from '../../contexts/CurrentUserContext';
 import { axiosReq } from '../../api/axiosDefaults';
 
-const GroupList = () => {
+const GroupList = ({groupCreated}) => {
   const [groups, setGroups] = useState([]);
   // const { currentUser } = useContext(CurrentUserContext);
  const currentUser = useCurrentUser();
@@ -13,28 +13,30 @@ const GroupList = () => {
       try {
         // I commented the jsx because this get api is not working
         const response = await axiosReq.get('/groups/');
-        setGroups(response.data.filter(group => group.members.some(member => member.id === currentUser.id)));
+        console.log('groups data: ', response.data)
+        setGroups(response?.data?.data);
+        // setGroups(response.data.filter(group => group.members.some(member => member.id === currentUser.id)));
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchGroups();
-  }, [currentUser]);
+  }, [groupCreated]);
 
   return (
     <div>
       <h2>Groups</h2>
-      {/* {groups.map((group) => (
+      {groups.map((group) => (
         <div key={group.id}>
           <h3>{group.name}</h3>
           <ul>
             {group.members.map((member) => (
-              <li key={member.id}>{member.username}</li>
+              <li key={member.username}>{member.username}</li>
             ))}
           </ul>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 };

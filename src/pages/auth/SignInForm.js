@@ -17,6 +17,7 @@ import appStyles from "../../App.module.css";
 import { useCurrentTokken, useSetCurrentUser } from "../../contexts/CurrentUserContext";
 import { useRedirect } from "../../hooks/useRedirect";
 import { setTokenTimestamp } from "../../utils/utils";
+import { axiosReq } from "../../api/axiosDefaults";
 
 function SignInForm() {
   const setCurrentUser = useSetCurrentUser();
@@ -34,20 +35,21 @@ function SignInForm() {
   const history = useHistory();
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
-      // console.log(data)
+      console.log(data)
      
       setCurrentUser(data.user);
       setTokenTimestamp(data);
-      // const res = await axios.get("/getcookie/");
-      fetch('/getcookie/')
-      .then(response => response.text())
-      .then(value => {
-        console.log(value); // logs the value of the session storage item
-        setTokken(value)
-  });
+      console.log('login data: ', data);
+
+      // axios.get('/getcookie/')
+      // .then(response => response.text())
+      // .then(value => {
+      //   console.log('getcookie: ', value); // logs the value of the session storage item
+      //   setTokken(value)
+      // });
       
       history.push("/");
     } catch (err) {
@@ -62,7 +64,7 @@ function SignInForm() {
       }
     }
   };
-  
+
 
   const handleChange = (event) => {
     setSignInData({

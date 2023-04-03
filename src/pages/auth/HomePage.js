@@ -9,6 +9,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 
 function HomePage() {
   const [todos, setTodos] = useState([]); // initialize a state hook for todos
+  const [totalCount, setTotalCount] = useState(0)
   const [loader, setLoader] = useState(true);
 
   const getTodos = async () => {
@@ -17,13 +18,15 @@ function HomePage() {
       // console.log('test') // if this is deleted the tasks dissapear
       const response = await axiosReq.get(
         // make a GET request using the custom axios request function
-        `https://task-backend.herokuapp.com/todos/` // use the current user's ID to filter todos
+        `/todos/` // use the current user's ID to filter todos
+        // `https://task-backend.herokuapp.com/todos/` // use the current user's ID to filter todos
       );
       const {
-        data: { results },
+        data
       } = response; // get the response data
-      // console.log(results)
-      setTodos(results); // update the todos state with the response data
+      console.log('todo res: ', data)
+      setTodos(data?.data); // update the todos state with the response data
+      setTotalCount(data?.total_elements)
     } catch (err) {
       // handle errors
       console.log(err);
@@ -39,7 +42,7 @@ function HomePage() {
   return (
     <div className="grid-container" style={{ textAlign: "center" }}>
       <div className="title" style={{ gridRow: "1 / 3", gridColumn: "1 / 2" }}>
-        <h2 style={{ fontSize: "8rem", margin: "4rem", textAlign: "center" }}>
+        <h3 style={{ fontSize: "6rem", margin: "4rem", textAlign: "center" }}>
           TASK{" "}
           <span
             style={{
@@ -51,7 +54,7 @@ function HomePage() {
           >
             Cruncher
           </span>
-        </h2>
+        </h3>
 
         <h3 style={{ padding: "2rem" }}>Welcome to Task Cruncher where we remember your tasks so you don't have to!</h3>
         <h3 style={{ padding: "2rem" }}><span
@@ -62,7 +65,7 @@ function HomePage() {
             letterSpacing: "-0.05em",
           }}
         >
-          {todos.length}
+          {totalCount}
         </span> tasks crunched so far!</h3>
       </div>
       <div className="body" style={{ gridRow: "3 / 5", gridColumn: "1 / 2", padding: "2rem" }}>

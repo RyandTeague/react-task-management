@@ -13,6 +13,8 @@ import { useRedirect } from "../../hooks/useRedirect";
 import { Prev } from "react-bootstrap/esm/PageItem";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getAccessToken } from "../../utils/utils";
+import moment from "moment";
 
 const TaskPage = () => {
   // useRedirect("loggedOut");
@@ -23,24 +25,6 @@ const TaskPage = () => {
   const [loader, setLoader] = useState(true);
   // console.log(currentTokken);
   // axios.defaults.withCredentials = currentTokken;
-  const getTodos = async () => {
-    // async function to get todos from the server
-    try {
-      // console.log('test') // if this is deleted the tasks dissapear
-      const response = await axiosReq.get(
-        // make a GET request using the custom axios request function
-        `https://task-backend.herokuapp.com/todos/?profile_id=${currentUser.profile_id}` // use the current user's ID to filter todos
-      );
-      const {
-        data: { results },
-      } = response; // get the response data
-      // console.log(results)
-      setTodos(results); // update the todos state with the response data
-    } catch (err) {
-      // handle errors
-      console.log(err);
-    }
-  };
 
   useEffect(() => {
     // useEffect hook to get todos on component mount
@@ -48,7 +32,29 @@ const TaskPage = () => {
     setLoader(false);
   }, [loader]);
 
+  const getTodos = async () => {
+    // async function to get todos from the server
+    try {
+      // console.log('test') // if this is deleted the tasks dissapear
+      const response = await axiosReq.get(
+        // make a GET request using the custom axios request function
+        `/todos/?profile_id=${currentUser.profile_id}` // use the current user's ID to filter todos
+        // `https://task-backend.herokuapp.com/todos/?profile_id=${currentUser.profile_id}` // use the current user's ID to filter todos
+      );
+      const {
+        data
+      } = response; // get the response data
+      console.log('todos data: ', data)
+      setTodos(data?.data); // update the todos state with the response data
+    } catch (err) {
+      // handle errors
+      console.log(err);
+    }
+  };
+
+
   const addTodo = async (newTodo) => {
+    console.log('addTodo data: ', newTodo);
     // async function to add a new todo to the server
     try {
       // debugger
@@ -94,10 +100,11 @@ const TaskPage = () => {
       // console.log()
       await axiosReq
         .post(
-          "https://task-backend.herokuapp.com/todos/",
+          "/todos/",
+          // "https://task-backend.herokuapp.com/todos/",
           // axios.defaults.headers.post['Cookie'] = currentTokken,
           newTodo,
-          config
+          config,
           // {
           //   headers: {
           //     'X-CSRFToken':  Cookies.get('csrftoken'),
@@ -143,6 +150,40 @@ const TaskPage = () => {
     }
   };
 
+
+  const updateTodo = async (data) => {
+    console.log('update data: ', data);
+    const { id, deadline } = data;
+    try {
+      const config = {
+        withCredentials: true,
+        headers:{
+          "X-CSRFToken": Cookies.get("csrftoken"),
+        }
+      };
+      await axios
+        .put(
+          `/todos/${id}/`,
+          {...data, deadline: deadline ? moment(deadline).format("YYYY-MM-DD HH:MM") : null,},
+          config,
+        )
+        .then((response) => {
+          console.log('todo update res data: ', response.data);
+          setLoader(!loader);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.log(`An error occurred while adding a new todo: ${error}`);
+      if (error.response) {
+        console.log(`Response data: ${JSON.stringify(error.response.data)}`);
+        alert(`Error: ${error.response.data}`);
+      }
+    }
+  };
+
+
   return (
     <div className="wrapper">
       <Container style={{ backgroundColor: "#474B4F" }}>
@@ -162,10 +203,13 @@ const TaskPage = () => {
                     <ToDo
                       key={index}
                       id={todo.id}
+                      owner={todo?.owner}
                       profile_id={todo.profile_id}
                       title={todo.title}
+                      completed={todo.completed}
                       content={todo.content}
                       deadline={todo.deadline}
+                      updateTodo={updateTodo}
                     />
                   )
               )}

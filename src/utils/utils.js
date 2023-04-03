@@ -64,3 +64,8 @@ export const shouldRefreshToken = () => {
 export const removeTokenTimestamp = () => {
   localStorage.removeItem("refreshTokenTimestamp");
 };
+
+
+export const getAccessToken = ()=>{
+  return localStorage.getItem('jwt_access_token');
+}

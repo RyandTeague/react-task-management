@@ -20,12 +20,18 @@ import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { ProfileEditDropdown } from "../../components/MoreDropdown";
 import GroupList from "./GroupList";
-import CreateGroup from "./Group"
+import CreateGroup from "./CreateGroup"
+import axios from "axios";
+import moment from "moment";
+import Cookies from 'js-cookie'
+
 
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(true);
   const [userGroups, setUserGroups] = useState([]);
   const [errors, setErrors] = useState({});
+  const [loader, setLoader] = useState(false);
+  const [groupCreated, setGroupCreated] = useState(false);
   const [todos, setTodos] = useState([]); // initialize a state hook for todos 
   const currentUser = useCurrentUser();
   const { id } = useParams();
@@ -62,20 +68,55 @@ function ProfilePage() {
 
   useEffect(() => { // useEffect hook to get todos on component mount
     getTodos();
-  }, []);
+  }, [loader]);
 
   const getTodos = async () => { // async function to get todos from the server 
     try {
       const response = await axiosReq.get( // make a GET request using the custom axios request function 
-        `https://task-backend.herokuapp.com/todos/?owner=${id}` // use the current user's ID to filter todos 
+        `/todos/?owner=${id}` // use the current user's ID to filter todos 
+        // `https://task-backend.herokuapp.com/todos/?owner=${id}` // use the current user's ID to filter todos 
       );
       const { data } = response; // get the response data 
-      setTodos(data.results); // update the todos state with the response data
-      // console.log(data); 
+      setTodos(data?.data); // update the todos state with the response data
+      console.log('todos res data: ', data);
     } catch (err) { // handle errors 
       console.log(err);
     }
   };
+  
+
+  const updateTodo = async (data) => {
+    console.log('update data: ', data);
+    const { id, deadline } = data;
+    try {
+      const config = {
+        withCredentials: true,
+        headers:{
+          "X-CSRFToken": Cookies.get("csrftoken"),
+        }
+      };
+      await axios
+        .put(
+          `/todos/${id}/`,
+          {...data, deadline: deadline ? moment(deadline).format("YYYY-MM-DD HH:MM") : null,},
+          config,
+        )
+        .then((response) => {
+          console.log('todo update res data: ', response.data);
+          setLoader(!loader);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.log(`An error occurred while adding a new todo: ${error}`);
+      if (error.response) {
+        console.log(`Response data: ${JSON.stringify(error.response.data)}`);
+        alert(`Error: ${error.response.data}`);
+      }
+    }
+  };
+
 
   const mainProfile = (
     <>
@@ -138,7 +179,6 @@ function ProfilePage() {
         <Container className={appStyles.Content}>
           {hasLoaded ? (
             <Asset spinner />
-
           ) : (
             <>
               {mainProfile}
@@ -146,8 +186,8 @@ function ProfilePage() {
           )}
         </Container>
         <Container className={appStyles.Content}>
-          <GroupList />
-          <CreateGroup />
+          <GroupList groupCreated={groupCreated} />
+          <CreateGroup groupCreated={groupCreated} setGroupCreated={setGroupCreated} />
         </Container>
       </Col>
       <Col lg={4} xs={12} className="p-0 p-lg-2">
@@ -158,11 +198,12 @@ function ProfilePage() {
               <ToDo
                 key={index}
                 id={todo.id}
+                owner={todo?.owner}
                 title={todo.title}
                 content={todo.content}
                 deadline={todo.deadline}
+                updateTodo={updateTodo}
               />
-
             ))
           ) : (
             <p>No todos found.</p>

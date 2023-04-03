@@ -86,7 +86,8 @@ const NavBar = () => {
         <Navbar.Toggle
           ref={ref}
           onClick={() => setExpanded(!expanded)}
-          aria-controls="basic-navbar-nav"
+          aria-controls="basic-navbar-nav" 
+          className={styles.Toggle}
         />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">

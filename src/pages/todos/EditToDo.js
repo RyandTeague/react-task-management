@@ -15,17 +15,19 @@ import btnStyles from "../../styles/Button.module.css";
 
 import { useHistory, useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
+import axios from "axios";
 
 function EditToDo() {
   const [errors, setErrors] = useState({});
 
   const [todoData, setToDoData] = useState({
+    owner: {},
     title: "",
     content: "",
     deadline: null,
     completed: false,
   });
-  const { title, content, deadline, completed, } = todoData;
+  const {owner, title, content, deadline, completed, } = todoData;
   console.log(deadline);
   const history = useHistory();
   const { id } = useParams();
@@ -33,12 +35,13 @@ function EditToDo() {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/todos/${id}/`);
-        const { title, content, deadline, completed, is_owner } = data;
+        const { data } = await axios.get(`/todos/${id}/`);
+        console.log('single todo response: ', data);
+        const { owner, title, content, deadline, completed, is_owner } = data?.data;
 
         // is_owner
         //   ? 
-          setToDoData({ title, content, deadline, completed })
+          setToDoData({owner, title, content, deadline, completed })
           // console.log(moment(deadline).format('MM/DD/YYYY'))
          
           // : history.push("/");
@@ -85,17 +88,19 @@ function EditToDo() {
   const formData = new FormData();
     // debugger
 
+    formData.append("owner", owner?.id);
     formData.append("title", title);
     formData.append("content", content);
     formData.append("deadline", deadline);
     formData.append("completed", completed);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-console.log(formData)
+    console.log(formData)
     try {
-      await axiosReq.put(`/todos/${id}/`, formData);
-      // history.push(`/todos/${id}`);
+      await axios.put(`/todos/${id}/`, formData)
+      history.push(`/todos/create`);
     } catch (err) {
       // console.log(err);
       if (err.response?.status !== 401) {
