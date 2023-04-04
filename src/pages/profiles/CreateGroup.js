@@ -194,7 +194,7 @@ const CreateGroup = ({ groupCreated, setGroupCreated }) => {
       </form>
       {groupMessage && <p>{groupMessage}</p>}
       <hr />
-      <h3>Add member</h3>
+      <h3>Edit Groups</h3>
       <form style={{backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }} onSubmit={handleAddRemoveMember}>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around', }}>
           <label style={{ color: "#c9c9c9" }}>
@@ -217,7 +217,7 @@ const CreateGroup = ({ groupCreated, setGroupCreated }) => {
             />
           </label>
         </div>
-        <button style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }} type="submit">Add member</button>
+        <button style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }} type="submit">Edit Group</button>
       </form>
       {memberMessage && <p>{memberMessage}</p>}
     </div>

@@ -35,6 +35,8 @@ function ProfilePage() {
   const [todos, setTodos] = useState([]); // initialize a state hook for todos 
   const currentUser = useCurrentUser();
   const { id } = useParams();
+  const [totalCount, setTotalCount] = useState(0);
+  
 
   const { setProfileData, handleFollow, handleUnfollow } = useSetProfileData();
   const { pageProfile } = useProfileData();
@@ -79,6 +81,8 @@ function ProfilePage() {
       const { data } = response; // get the response data 
       setTodos(data?.data); // update the todos state with the response data
       console.log('todos res data: ', data);
+      setTodos(data?.data); // update the todos state with the response data
+      setTotalCount(data?.total_elements)
     } catch (err) { // handle errors 
       console.log(err);
     }
@@ -117,6 +121,8 @@ function ProfilePage() {
     }
   };
 
+  const tasksCompleted = (
+    <div>{profile?.todos_count - totalCount}</div>);
 
   const mainProfile = (
     <>
@@ -134,15 +140,15 @@ function ProfilePage() {
           <Row className="justify-content-center no-gutters">
             <Col xs={3} className="my-2">
               <div>{profile?.todos_count}</div>
-              <div>todos</div>
+              <div>Tasks Created</div>
             </Col>
             <Col xs={3} className="my-2">
-              <div>{profile?.followers_count}</div>
-              <div>followers</div>
+              <div>{totalCount}</div>
+              <div>Tasks in progress</div>
             </Col>
             <Col xs={3} className="my-2">
-              <div>{profile?.following_count}</div>
-              <div>following</div>
+              <div>{tasksCompleted}</div>
+              <div>Tasks completed</div>
             </Col>
           </Row>
         </Col>

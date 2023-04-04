@@ -15,11 +15,9 @@ function HomePage() {
   const getTodos = async () => {
     // async function to get todos from the server
     try {
-      // console.log('test') // if this is deleted the tasks dissapear
       const response = await axiosReq.get(
         // make a GET request using the custom axios request function
         `/todos/` // use the current user's ID to filter todos
-        // `https://task-backend.herokuapp.com/todos/` // use the current user's ID to filter todos
       );
       const {
         data
@@ -57,7 +55,7 @@ function HomePage() {
         </h3>
 
         <h3 style={{ padding: "2rem" }}>Welcome to Task Cruncher where we remember your tasks so you don't have to!</h3>
-        <h3 style={{ padding: "2rem" }}><span
+        <h3 style={{ padding: "2rem" }}> You are crunching <span
           style={{
             fontFamily: "Bebas Neue",
             color: "gold",
@@ -66,7 +64,7 @@ function HomePage() {
           }}
         >
           {totalCount}
-        </span> tasks crunched so far!</h3>
+        </span> tasks right now!</h3>
       </div>
       <div className="body" style={{ gridRow: "3 / 5", gridColumn: "1 / 2", padding: "2rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "2rem" }}>

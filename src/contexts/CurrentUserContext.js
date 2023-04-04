@@ -18,7 +18,6 @@ export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentTokken, setTokken] = useState(null);
   const history = useHistory();
-// console.log(currentTokken)
   const handleMount = async () => {
     try {
       const { data } = await axios.get("dj-rest-auth/user/");
@@ -32,52 +31,6 @@ export const CurrentUserProvider = ({ children }) => {
   useEffect(() => {
     handleMount();
   }, []);
-
-  // useMemo(() => {
-  //   axiosReq.interceptors.request.use(
-  //     async (config) => {
-  //       if (shouldRefreshToken()) {
-  //         try {
-  //           await axios.post("/dj-rest-auth/token/refresh/");
-  //         } catch (err) {
-  //           setCurrentUser((prevCurrentUser) => {
-  //             if (prevCurrentUser) {
-  //               history.push("/signin");
-  //             }
-  //             return null;
-  //           });
-  //           removeTokenTimestamp();
-  //           return config;
-  //         }
-  //       }
-  //       return config;
-  //     },
-  //     (err) => {
-  //       return Promise.reject(err);
-  //     }
-  //   );
-
-  //   axiosRes.interceptors.response.use(
-  //     (response) => response,
-  //     async (err) => {
-  //       if (err.response?.status === 401) {
-  //         try {
-  //           await axios.post("/dj-rest-auth/token/refresh/");
-  //         } catch (err) {
-  //           setCurrentUser((prevCurrentUser) => {
-  //             if (prevCurrentUser) {
-  //               history.push("/signin");
-  //             }
-  //             return null;
-  //           });
-  //           removeTokenTimestamp();
-  //         }
-  //         return axios(err.config);
-  //       }
-  //       return Promise.reject(err);
-  //     }
-  //   );
-  // }, [history]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

@@ -2,20 +2,43 @@
 
 ## Project Goals
 
-I want to create a task management APP. USERS Can Share tasks with other users.
+I want to create a task management app. Users Can Share tasks with other users.
 Feature List:
--BASIC 
-    -CREATE A TASK THAT CAN be EDITED AND Deleted. 
-    Set task Deadline,
--Additional features
-    -Set task from SET-→ in Progress → done 
-    -Allow different roles in tasks 
-    -Group Users as "project" and set multiple tasks
-    -Assign tasks to people 
-    -When task updated, group informed
+- BASIC 
+    - Functional app that allows users to create accounts and log in (User stories 1-8, 14,15, )
+    - Create a task that can be edited and Deleted. (User stories 9, 10)
+    - Set task Deadline, (User stories 11, 16, 17 )
+- Additional features
+    - Allow Users to befriend each other (User stories 12,13)
+    - Allow different roles in tasks 
+    - Group Users as "project" and set multiple tasks (User stories 19, 20)
+    - Assign tasks to people (User stories 18)
+    - When task updated, group informed
 
 The live link can be found here - https://task-todo-frontend.herokuapp.com
 
+## User Stories
+
+1. As a user I can view a navbar from every page so that I can navigate easily between pages
+2. As a user I can navigate through pages quickly so that I can view content seamlessly without page refresh
+3. As a user I can create a new account so that I can access all the features for signed up users
+4. As a user I can sign in to the app so that I can access functionality for logged in users
+5. As a user I can tell if I am logged in or not so that I can log in if I need to
+6. As a user I can maintain my logged-in status until I choose to log out so that my user experience is not compromised
+7. As a logged out user I can see sign in and sign up options so that I can sign in/sign up
+8. As a user I can view user's avatars so that I can easily identify users of the application
+9. As a User I can create tasks so that I can remember to do things
+10. As a user I can view all the most recent tasks, ordered by most recently created first so that I am up to date
+11. As a user I can view my list of tasks organised my soonest deadline date
+12. As a user I can view other people’s profiles and see their tasks if they are my friend
+13. As a logged in user I can friend and unfriend other users so that we can assign each other tasks
+14. As a logged in user I can edit my profile so that I can change my profile picture and bio
+15. As a logged in user I can update my username and password so that I can change my display name and keep my profile secure
+16. As a User I can Set a Deadline for a task so that I can see when they are due to be completed
+17. As a user I can have a task that has passed it’s deadline be marked as overdue so that I can see what tasks are overdue
+18. As a user I can assign tasks to other people so that I can work in a team, they will be able to update the task as well
+19. As a user I want to be able to Create Groups of other users so that I can share tasks with them
+20. As a User I want to be able to share tasks with groups I am in so that i can work co-operatively with other Users
 
 ## Features
 
@@ -26,7 +49,6 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
 - Create Task
 
 - List Tasks
-    
 
 - Create Groups
   
@@ -40,73 +62,73 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     - In future versions I would like the user to have the ability to add tasks set to an entire group of people who can interact with the task
 
 - Projects
-    = I would like for a user to be able to create a project and then set themselves tasks within that project. essentially grouping tasks together.
+    - I would like for a user to be able to create a project and then set themselves tasks within that project. essentially grouping tasks together.
 
 ## App Structure
 
 ### Tasks
 
 - AddToDo component
-    ```
-    const AddTodo = ({ addTodo, user }) => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [deadline, setDeadline] = useState(null);
+```
+const AddTodo = ({ addTodo, user }) => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [deadline, setDeadline] = useState(null);
 
-    const addTodoHandler = e => {
-        e.preventDefault();
-        addTodo({
-            title,
-            content,
-            deadline: deadline ? moment(deadline).format("YYYY-MM-DD HH:MM") : null,
-            completed: "false",
-        });
+  const addTodoHandler = e => {
+    e.preventDefault();
+    addTodo({
+      title,
+      content,
+      deadline: deadline ? moment(deadline).format("YYYY-MM-DD HH:MM") : null,
+      completed: "false",
+    });
 
-        setTitle('');
-        setContent('');
-        setDeadline(null);
-    };
+    setTitle('');
+    setContent('');
+    setDeadline(null);
+  };
 
-    return (
-        <Form style={{ backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }}>
-            <Form.Group controlId='title'>
-                <Form.Label style={{ color: "#c9c9c9" }}>Title</Form.Label>
-                <Form.Control type='text' placeholder='Enter Todo Title' onChange={e => setTitle(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
-            </Form.Group>
+  return (
+    <Form style={{ backgroundColor: "#1c1c1c", padding: "10px", borderRadius: "2px", border: "1px solid #383838" }}>
+      <Form.Group controlId='title'>
+        <Form.Label style={{ color: "#c9c9c9" }}>Title</Form.Label>
+        <Form.Control type='text' placeholder='Enter Todo Title' onChange={e => setTitle(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
+      </Form.Group>
 
-            <Form.Group controlId='content'>
-                <Form.Label style={{ color: "#c9c9c9" }}>Content</Form.Label>
-                <Form.Control as='textarea' placeholder='Enter Content' onChange={e => setContent(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
-            </Form.Group>
+      <Form.Group controlId='content'>
+        <Form.Label style={{ color: "#c9c9c9" }}>Content</Form.Label>
+        <Form.Control as='textarea' placeholder='Enter Content' onChange={e => setContent(e.target.value)} style={{ backgroundColor: "#1c1c1c", color: "#c9c9c9", borderRadius: "5px", border: "2px solid #383838", fontSize: "1.2rem", padding: "0.5rem", marginBottom: "1rem", width: "100%" }} />
+      </Form.Group>
 
-            <Form.Group controlId='deadline'>
-                <Form.Label style={{ color: "#c9c9c9" }}>Deadline</Form.Label>
-                    <DatePicker
-                    selected={deadline}
-                    onChange={date => setDeadline(date)}
-                    dateFormat="MMMM d, yyyy"
-                    minDate={new Date()} // set minimum date to the current date
-                    style={{ marginBottom: "1rem", width: "100%" }}
-                />
-            </Form.Group>
+      <Form.Group controlId='deadline'>
+        <Form.Label style={{ color: "#c9c9c9" }}>Deadline</Form.Label>
+        <DatePicker
+          selected={deadline}
+          onChange={date => setDeadline(date)}
+          dateFormat="MMMM d, yyyy"
+          minDate={new Date()} // set minimum date to the current date
+          style={{ marginBottom: "1rem", width: "100%" }}
+        />
+      </Form.Group>
 
-            <Button variant='primary' type='submit' onClick={addTodoHandler} style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Add Todo</Button>
-            </Form>
-        );
-    };
+      <Button variant='primary' type='submit' onClick={addTodoHandler} style={{ backgroundColor: "#31b0d5", borderRadius: "5px", border: "none", width: "100%" }}>Add Todo</Button>
+    </Form>
+  );
+};
 
-    export default AddTodo;
-
-    ```
-    - The code defines a React component called AddTodo which is a form for adding new todo items. The component uses useState to initialize three state variables to track the user's input for the title, content, and deadline fields. The addTodoHandler function is called when the user clicks the "Add Todo" button, and it calls the addTodo function passed as a prop with the input values, and resets the input fields. The form is styled using react-bootstrap components and customized inline styling. The component is exported as a default export for use in other React components.
+export default AddTodo;    
+```
+    - The component returns a <Form> component that contains several <Form.Group> components with labels and input fields for entering information about a new to-do item. The fields include Title, Content, and Deadline.The component also uses the DatePicker component from the react-datepicker library to allow the user to select a deadline for the to-do item.When the user clicks the Add Todo button, the addTodoHandler function is called. This function creates a new to-do object with the input values from the form, including the title, content, deadline, and completed properties. The addTodo function passed in as a prop is then called with the new to-do object as an argument.Finally, the component exports the AddTodo component as the default export of the module, so that it can be imported and used in other parts of the application.
     
     - Reuses
         - Currently this component is only used in the TaskPage page but it could be used again in a page for creating tasks specifically for a group of users or in a project page.
 
 - ToDo List component
-    ```
+```
     const ToDo = (props) => {
-    const {
+
+  const {
     id,
     owner,
     profile_id,
@@ -118,62 +140,75 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     updated_at,
     todoPage,
     setToDos,
-    } = props;
+    updateTodo,
+  } = props;
 
-    const currentUser = useCurrentUser();
-    const is_owner = currentUser?.username === owner;
-    const history = useHistory();
-    // console.log(id)
-    const handleEdit = () => {
+  const currentUser = useCurrentUser();
+  const is_owner = currentUser?.username === owner?.username;
+  const history = useHistory();
+  const [checked, setChecked] = useState(false);
+  const handleEdit = () => {
     history.push(`/todos/${id}/edit`);
-    };
+  };
 
-    const handleDelete = async () => {
-        try {
-            await axiosRes.delete(`/todos/${id}/`);
-            history.goBack();
-        } catch (err) {
+  const handleDelete = async () => {
+    try {
+      await axiosRes.delete(`/todos/${id}/`);
+      history.goBack();
+    } catch (err) {
       // console.log(err);
-        }
-    };
+    }
+  };
 
-    return (
-        <Card className={styles.ToDo}>
-        <Card.Body>
-            <Media className="align-items-center justify-content-between">
-            <Link to={`/profiles/${profile_id}`}>
-                {owner}
-            </Link>
-            <div className="d-flex align-items-center">
-                <span>{updated_at}</span>
-                <MoreDropdown
+  return (
+    <Card className={styles.ToDo}>
+      <Card.Body>
+        <Media className="align-items-center justify-content-between">
+          <Link to={`/profiles/${profile_id}`}>
+            {owner?.username}
+          </Link>
+          <div className="d-flex align-items-center">
+            <CheckboxWithLabel
+              label="Is completed"
+              checked={checked} 
+              onChange={()=>{
+                setChecked(true)
+                setTimeout(()=>{
+                  setChecked(false)
+                  updateTodo({id, owner: owner?.id, title, deadline, completed: true})
+                }, 1000);
+              }} 
+            />
+            <span>{updated_at}</span>
+              <MoreDropdown
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
-                />
-            </div>
-            </Media>
-        </Card.Body>
-        <Card.Body>
-            {title && <Card.Title className="text-center">{title}</Card.Title>}
-            {content && <Card.Text>{content}</Card.Text>}
-            {deadline && <Card.Text>{deadline}</Card.Text>}
-        </Card.Body>
-        </Card>
-    );
-    };
+              />
+  
+          </div>
+        </Media>
+      </Card.Body>
+      <Card.Body>
+        {title && <Card.Title className="text-center">{title}</Card.Title>}
+        {content && <Card.Text>{content}</Card.Text>}
+        {deadline && <Card.Text>{deadline}</Card.Text>}
+      </Card.Body>
+    </Card>
+  );
+};
 
-    export default ToDo;
-    ```
-    - The code defines a functional component called ToDo that renders a to-do item using props including id, owner, profile_id, profile_image, completed, deadline, title, content, updated_at, todoPage, and setToDos. It also imports and uses a MoreDropdown component. The component defines two functions, handleEdit and handleDelete, which handle editing and deleting the to-do item using the useHistory hook and axios. The ToDo component renders a Card component with a Media component containing a link to the owner's profile and a MoreDropdown component. It also renders the to-do item's title, content, and deadline.
+export default ToDo;
+```
+    - The component uses the useCurrentUser hook to get the current user and the useHistory hook to get access to the browser's history object for navigating to different pages.The component returns a Card component that displays the details of the to-do item, such as the owner, title, content, and deadline.The component also uses the CheckboxWithLabel component to allow the user to mark the to-do item as completed. When the checkbox is checked, the updateTodo function is called to update the completed property of the to-do item to true. To give the user feedback that the item was completed, the checkbox is automatically unchecked after a 1-second delay using setTimeout.The component also uses the MoreDropdown component to display a dropdown menu with options to edit or delete the to-do item.Finally, the component exports the ToDo component as the default export of the module, so that it can be imported and used in other parts of the application.
 
     - Reuses
-        - The todo function is currently used in the TaskPage and the ProfilePage to list the currently logged in User's Todos. Future uses of the ToDo would be to
+        - The todo function is currently used in the TaskPage and the ProfilePage to list the currently logged in User's Todos. It is used repeatedly in both of these pages as the component renders a single todo item so it is used for each item in the todo list retrieved from the API. Future uses of the ToDo would be to
         pass it the props for the todos from a group's todos or a particular project. 
 
 #### Data Model
 
 - Model
-    ```
+```
     class Todo(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     completed = models.BooleanField(default=False)
@@ -183,34 +218,36 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
 
+
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.id} {self.title}'
-    ```
-    - Here's a brief explanation of each field:
+```
+    - This Django model is called Todo and represents a to-do item. It has several fields, including:
+        - deadline: a DateTimeField that stores the deadline for the to-do item.
+        - completed: a BooleanField that stores whether the to-do item has been completed.
+        - owner: a ForeignKey that links the to-do item to the user who created it.
+        - created_at: a DateTimeField that stores the date and time when the to-do item was created.
+        - updated_at: a DateTimeField that stores the date and time when the to-do item was last updated.
+        - title: a CharField that stores the title of the to-do item.
+        - content: a TextField that stores additional details about the to-do item.
+        - The Meta class sets the default ordering for the model to be by the ID in descending order (ordering = ['-id']).
 
-        - deadline: This field is a DateTimeField that stores the deadline for the task. It's optional, which is why null=True and blank=True are set.
-        - completed: This field is a BooleanField that keeps track of whether the task has been completed or not. By default, it's set to False.
-        - owner: This field is a ForeignKey that links each task to a user. It's set to on_delete=models.CASCADE, which means that if the user is deleted, all associated tasks will be deleted as well.
-        - created_at: This field is a DateTimeField that stores the date and time when the task was created. auto_now_add=True means that it will be automatically set to the current date and time when the task is created.
-        - updated_at: This field is a DateTimeField that stores the date and time when the task was last updated. auto_now=True means that it will be automatically updated to the current date and time whenever the task is saved.
-        - title: This field is a CharField that stores the title of the task. It has a maximum length of 255 characters.
-        - content: This field is a TextField that stores the content of the task. It's optional, which is why blank=True is set.
-        - The Meta class is used to define some metadata about the model. In this case, it sets the default ordering to be by created_at, in descending order (i.e., newest tasks first).
+        - The __str__ method returns a string representation of the to-do item that includes its ID and title.
 
 - Serializer
-    ```
-    class TodoSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+```
+    class TodoListSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     deadline = serializers.DateTimeField(format="%Y-%m-%d")
 
     def get_is_owner(self, obj):
-        request = self.context['request']
+        request = self.context.get('request')
         return request.user == obj.owner
 
     class Meta:
@@ -220,73 +257,104 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
             'profile_image', 'created_at', 'updated_at',
             'title', 'content', 'deadline', 'completed',
         ]
-    ```
-    - The serializer has several fields including "owner" which is a read-only field that returns the owner's username, "is_owner" which is a method field that returns whether the current user is the owner of the task, "profile_id" which is a read-only field that returns the ID of the owner's profile, "profile_image" which is a read-only field that returns the URL of the owner's profile image, and "deadline" which formats the date-time in a specific way.
 
-    The serializer also has a method field "get_is_owner" which checks if the current user is the owner of the task.
 
-    The serializer's Meta class defines the model and fields to be serialized, including 'id', 'owner', 'is_owner', 'profile_id', 'profile_image', 'created_at', 'updated_at', 'title', 'content', 'deadline', and 'completed'.
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = '__all__'
+```
+    - TodoListSerializer: This serializer is used to serialize a list of Todo objects. It includes the following fields:
+        - id: the ID of the to-do item.
+        - owner: a serialized representation of the User object that owns the to-do item.
+        - is_owner: a boolean field indicating whether the current user is the owner of the to-do item.
+        - profile_id: the ID of the Profile object associated with the owner of the to-do item.
+        - profile_image: the URL of the profile image of the owner of the to-do item.
+        - created_at: the date and time when the to-do item was created.
+        - updated_at: the date and time when the to-do item was last updated.
+        - title: the title of the to-do item.
+        - content: the content of the to-do item.
+        - deadline: the deadline of the to-do item formatted as a string.
+        - completed: a boolean field indicating whether the to-do item has been completed.
+        - The serializer also includes a custom method field called is_owner that returns a boolean indicating whether the current user is the owner of the to-do item.
+
+    - TodoSerializer: This serializer is used to serialize a single Todo object. It includes all the fields of the Todo model using the fields = '__all__' option.
 
 - Views
-    ```
-    class TodoList(generics.ListCreateAPIView):
-    queryset = Todo.objects.all().order_by('-created_at')
-    serializer_class = TodoSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [
-        filters.OrderingFilter,
-        filters.SearchFilter,
-        DjangoFilterBackend,
-    ]
-    filterset_fields = [
-        'owner__profile',
-    #    'project'
-    ]
-    search_fields = [
-        'owner__username',
-        'title',
-    #    'project',
-    ]
-    ordering_fields = [
-        'deadline',
-        'created_at',
-        'updated_at',
-    ]
+```
+    class TodoListCreateAPIView(APIView):
+	permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+	def post(self, request, format=None):
+		data = request.data
+		data['owner'] = request.user.id
+		serializer = TodoSerializer(data=data)
+		if serializer.is_valid():
+			serializer.save()
+		else:
+			return Response({'errors': serializer.errors, 'message': "Todo create failed"}, status=status.HTTP_400_BAD_REQUEST)
+		return Response({'data': serializer.data, 'message': "Todo created successfully"}, status=status.HTTP_201_CREATED)
+
+	def get(self, request, format=None):
+		todos = Todo.objects.filter(owner=request.user, completed=False)
+		response = get_paginated_response(request, todos, TodoListSerializer)
+		print('response: ', response)
+		return Response(response, status=status.HTTP_200_OK)
 
 
-    class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = TodoSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-    queryset = Todo.objects.all().order_by('-created_at')
-    ```
-    - The first view is called "TodoList" and inherits from generics.ListCreateAPIView. It shows a list of all the tasks and allows users to create new tasks.
+class TodoRetrieveUpdateDestroyAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-    The queryset attribute sets the list of objects that will be returned by the view. It retrieves all Todo objects and orders them by their creation date in descending order.
+    def get(self, request, pk, format=None):
+        try:
+            todo = Todo.objects.get(pk=pk)
+            serializer = TodoListSerializer(todo, context={'request': request})
+            return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        except Todo.DoesNotExist:
+            return Response({'message': "Requested todo doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    The serializer_class attribute sets the serializer that will be used to convert Todo objects to JSON format.
+    def put(self, request, pk, format=None):
+        try:
+            todo = Todo.objects.get(pk=pk)
+            serializer = TodoSerializer(todo, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response({'errors': serializer.errors, 'message': "Todo update failed"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'data': serializer.data, 'message': "Todo updated successfully"}, status=status.HTTP_200_OK)
+        except Todo.DoesNotExist:
+            return Response({'message': "Requested todo doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    The permission_classes attribute sets the list of permission classes that determine who can access the view. In this case, IsAuthenticatedOrReadOnly allows authenticated users to create new tasks and all users to view the list of tasks.
+    def patch(self, request, pk, format=None):
+        try:
+            todo = Todo.objects.get(pk=pk)
+            serializer = TodoSerializer(todo, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response({'errors': serializer.errors, 'message': "Todo updated successfully"}, status=status.HTTP_200_OK)
+            return Response({'errors': serializer.errors, 'message': "Todo update failed"}, status=status.HTTP_400_BAD_REQUEST)
+        except Todo.DoesNotExist:
+            return Response({'message': "Requested todo doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    The filter_backends attribute sets the list of filter backends to be used for filtering the queryset. In this case, OrderingFilter, SearchFilter, and DjangoFilterBackend are used.
 
-    The filterset_fields attribute sets the list of fields that can be used to filter the queryset by using query parameters.
+    def delete(self, request, pk, format=None):
+        try:
+            todo = Todo.objects.get(pk=pk)
+            todo.delete()
+            return Response({'message': "Todo deleted successfully"}, status=status.HTTP_200_OK)
+        except Todo.DoesNotExist:
+            return Response({'message': "Requested todo doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+```
+    - TodoListCreateAPIView: This view allows users to create new to-do items and retrieve a list of their incomplete to-do items. It includes the following methods:
+        - post: This method creates a new to-do item by deserializing the request data using the TodoSerializer. The owner field is set to the ID of the authenticated user. If the serializer is valid, the to-do item is saved and a response with the serialized data and a success message is returned. If the serializer is invalid, a response with the errors and a failure message is returned.
+        - get: This method retrieves a list of incomplete to-do items for the authenticated user using the Todo.objects.filter method. The list is then paginated using a helper function called get_paginated_response and serialized using the TodoListSerializer. The paginated response is then returned.
 
-    The search_fields attribute sets the list of fields that can be used to search for a task by using query parameters.
-
-    The ordering_fields attribute sets the list of fields that can be used to order the queryset by using query parameters.
-
-    The perform_create method is called when a new task is created. It sets the owner of the task to the user who made the request.
-
-    The second view is called "TodoDetail" and inherits from generics.RetrieveUpdateDestroyAPIView. It shows the details of a specific task and allows users to update or delete it.
-
-    The queryset attribute sets the list of objects that will be returned by the view. It retrieves all Todo objects and orders them by their creation date in descending order.
-
-    The serializer_class attribute sets the serializer that will be used to convert Todo objects to JSON format.
-
-    The permission_classes attribute sets the list of permission classes that determine who can access the view. In this case, IsOwnerOrReadOnly allows only the owner of the task to update or delete it, while all users can view the details of the task.
+        - TodoRetrieveUpdateDestroyAPIView: This view allows users to retrieve, update, and delete a single to-do item. It includes the following methods:
+            - get: This method retrieves a single to-do item with the specified ID using the Todo.objects.get method. The item is then serialized using the TodoListSerializer and returned in a response.
+            - put: This method updates a single to-do item with the specified ID by deserializing the request data using the TodoSerializer. If the serializer is valid, the item is updated and a response with the serialized data and a success message is returned. If the serializer is invalid, a response with the errors and a failure message is returned.
+            - patch: This method updates a single to-do item with the specified ID using partial updates by deserializing the request data using the TodoSerializer with partial=True. If the serializer is valid, the item is updated and a response with the serialized data and a success message is returned. If the serializer is invalid, a response with the errors and a failure message is returned.
+            - delete: This method deletes a single to-do item with the specified ID using the Todo.objects.get and delete methods. If the item is successfully deleted, a response with a success message is returned. If the item does not exist, a response with a failure message is returned.
 
 ### Groups
 - Create Group component
@@ -300,7 +368,7 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
 #### Data Model
 
 - Model
-    ```
+```
     class Group(models.Model):
     owner = models.ForeignKey(
         User, related_name='group_created', on_delete=models.CASCADE
@@ -309,83 +377,162 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
     members = models.ManyToManyField(User, related_name='group_member')
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
-        ordering = ['name']
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.owner} {self.name}'
-    ```
-    - Here's a brief explanation of each field:
-        - owner: This field is a ForeignKey that links each group to its creator (a User object). related_name='group_created' creates a reverse relationship from User objects to their created groups, which can be accessed via the group_created attribute. on_delete=models.CASCADE means that if the associated user is deleted, all associated groups will also be deleted.
-        - name: This field is a CharField that stores the name of the group. It has a maximum length of 100 characters.
-        - members: This field is a ManyToManyField that links each group to its members (multiple User objects). related_name='group_member' creates a reverse relationship from User objects to the groups they belong to, which can be accessed via the group_member attribute.
-        - created_at: This field is a DateTimeField that stores the date and time when the group was created. auto_now_add=True means that it will be automatically set to the current date and time when the group is created.
-        - The Meta class is used to define some metadata about the model. In this case, it sets the default ordering to be by name, in ascending order.
+```
+    - This model called Group represents a group of users. It has several fields, including:
+        - owner: a ForeignKey that links the group to the user who created it.
+        - name: a CharField that stores the name of the group.
+        - members: a ManyToManyField that links the group to the users who are members of it.
+        - created_at: a DateTimeField that stores the date and time when the group was created.
+        - The Meta class sets the default ordering for the model to be by the ID in descending order (ordering = ['-id']).
+
+        - The __str__ method returns a string representation of the group that includes the owner and name of the group.
 
 - Serializer
-    ```
-    class GroupSerializer(serializers.ModelSerializer):
+```
+    class GroupListSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
-    members = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    members = UserSerializer(many=True)
 
     def get_is_owner(self, obj):
-        request = self.context['request']
+        request = self.context.get('request')
         return request.user == obj.owner
 
     class Meta:
         model = Group
         fields = ['id', 'owner', 'is_owner', 'name', 'members', 'created_at']
         read_only_fields = ['id', 'created_at']
-    ```
-    - This is a serializer for the "Group" model that includes fields for the group's owner, name, members, and creation date.
-    The serializer has a method field for checking if the current user is the owner of the group, and the 'id' and 'created_at' fields are read-only.
+
+```
+    - This Django REST Framework serializer called GroupListSerializer serializes a Group model for list views. It has several fields, including:
+        - owner: a ReadOnlyField that serializes the username of the group's owner.
+        - is_owner: a SerializerMethodField that returns a boolean indicating whether the authenticated user is the owner of the group.
+        - members: a UserSerializer that serializes the members of the group.
+        - Meta: a nested class that specifies the model to be serialized (model = Group), the fields to be included in the serialized output (fields = [...]), and the fields that should be read-only (read_only_fields = [...]).
 
 - Views
-    ```
-    class GroupList(generics.CreateAPIView):
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = Group.objects.all().order_by('-created_at')
-    allowed_methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']
+```
+    class GroupListCreateAPIView(APIView):
+	permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        """Return a list of groups owned by the current user."""
-        if request.user.is_anonymous:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        groups = self.get_queryset().filter(
-            Q(owner=request.user) | Q(members=request.user)
-        ).distinct()
-        serializer = self.get_serializer(groups, many=True)
-        return Response(serializer.data)
+	def post(self, request, format=None):
+		data = request.data
+		data['owner'] = request.user.id
+		serializer = GroupSerializer(data=data)
+		if serializer.is_valid():
+			serializer.save()
+		else:
+			return Response({'errors': serializer.errors, 'message': "Group create failed"}, status=status.HTTP_400_BAD_REQUEST)
+		return Response({'data': serializer.data, 'message': "Group created successfully"}, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+	def get(self, request, format=None):
+		groups = Group.objects.filter(Q(owner=request.user)|Q(members=request.user)).distinct()
+		response = get_paginated_response(request, groups, GroupListSerializer)
+		print('response: ', response)
+		return Response(response, status=status.HTTP_200_OK)
 
 
-    class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = GroupSerializer
-    queryset = Group.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]
-    allowed_methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']
-    def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user)
-    ```
-    - The GroupList view inherits from generics.CreateAPIView and handles listing all groups and creating new ones.
+class GroupRetrieveUpdateDestroyAPIView(APIView):
+	permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-        - serializer_class: This attribute sets the serializer class that will be used to convert the model instances to JSON.
-        - permission_classes: This attribute sets the permission classes that determine who can access the view. In this case, IsAuthenticatedOrReadOnly allows authenticated users to create new groups and all users to view the list of groups.
-        - queryset: This attribute sets the queryset for the view. It retrieves all Group objects and orders them by their creation date in descending order.
-        - allowed_methods: This attribute sets the list of HTTP methods allowed for this view.
-        - get(): This method handles GET requests to the view. It returns a list of all groups owned by the current user or where the user is a member.
-        - perform_create(): This method handles creating new groups. It sets the owner of the group to the current user.
+	def get(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			serializer = GroupListSerializer(group, context={'request': request})
+			return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+	def put(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			serializer = GroupSerializer(group, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+			else:
+				return Response({'errors': serializer.errors, 'message': "Group update failed"}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'data': serializer.data, 'message': "Group updated successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+	def patch(self, request, pk, format=None):
+		try:
+			data = request.data
+			print('data: ', data)
+			group = Group.objects.get(pk=pk)
+			serializer = GroupSerializer(group, data=request.data, partial=True)
+			if serializer.is_valid():
+				serializer.save()
+			else:
+				return Response({'errors': serializer.errors, 'message': "Group update failed"}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'data': serializer.data, 'message': "Group updated successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+	def delete(self, request, pk, format=None):
+		try:
+			group = Group.objects.get(pk=pk)
+			group.delete()
+			return Response({'message': "Group deleted successfully"}, status=status.HTTP_200_OK)
+		except Group.DoesNotExist:
+			return Response({'message': "Requested status doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class UserListAPIView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, format=None):
+		users = User.objects.all()
+
+		serializer = UserSerializer(users, many=True)
+		return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+
     
-    - The GroupDetail view inherits from generics.RetrieveUpdateDestroyAPIView and handles viewing, updating, and deleting individual groups.
+```
+    - GroupListCreateAPIView is a view that handles both GET and POST requests. For a POST request, the view creates a new group with the owner set to the current user and returns a response indicating success or failure. For a GET request, the view retrieves all groups that the current user is either the owner of or a member of and returns a paginated response containing these groups.
 
-        - serializer_class: This attribute sets the serializer class that will be used to convert the model instances to JSON.
-        - queryset: This attribute sets the queryset for the view. It retrieves all Group objects.
-        - permission_classes: This attribute sets the permission classes that determine who can access the view. In this case, IsOwnerOrReadOnly allows only the owner of the group to update or delete it, while all users can view the details of the group.
-        - allowed_methods: This attribute sets the list of HTTP methods allowed for this view.
-        - get_queryset(): This method restricts the queryset to only the groups owned by the current user.
+    - GroupRetrieveUpdateDestroyAPIView is a view that handles GET, PUT, PATCH, and DELETE requests for a specific group identified by the provided primary key (pk). For a GET request, the view retrieves the group with the specified pk and returns a serialized representation of the group. For a PUT request, the view updates the group with the provided data and returns a response indicating success or failure. For a PATCH request, the view partially updates the group with the provided data and returns a response indicating success or failure. For a DELETE request, the view deletes the group with the specified pk and returns a response indicating success or failure.
+
+    - UserListAPIView is a view that handles GET requests and retrieves all users in the system. The view returns a serialized representation of all users.
+
+## Checkbox component
+```
+function CheckboxWithLabel({ label, checked, onChange }) {
+  return (
+    <Form.Check
+      type="checkbox"
+      label={label}
+      checked={checked}
+      onChange={onChange}
+    />
+  );
+}
+
+export default CheckboxWithLabel;
+```
+    - The component returns a <Form.Check> component that renders a checkbox input with a label, using the props passed to the component.The type prop of the <Form.Check> component is set to "checkbox" to render a checkbox input.The label prop is used to set the label of the checkbox.The checked prop is used to set the initial checked state of the checkbox.
+    The onChange prop is used to handle the change event of the checkbox. When the checkbox is clicked, the function passed to onChange is called with an event object that contains information about the change, such as the new checked state of the checkbox.
+
+    - Reuses
+        - The checkbox component is used in the ToDo list component and given these props:
+        ```
+        label="Is completed"
+              checked={checked} 
+              onChange={()=>{
+                setChecked(true)
+                setTimeout(()=>{
+                  setChecked(false)
+                  updateTodo({id, owner: owner?.id, title, deadline, completed: true})
+                }, 1000);
+        ```
+        - Since it is in the todo component it is reused everytime that a todo item is created. Currently the Task page and the Profile page renders Todo items so this component is present there.
 
 ## React
 
@@ -407,6 +554,27 @@ The live link can be found here - https://task-todo-frontend.herokuapp.com
 
 - Disadvantages of using React
     - Reusing components in a React application can bring many advantages, but it's essential to acknowledge the associated challenges and limitations. These include maintaining backwards compatibility to avoid breaking existing code, accommodating different use cases, managing large component libraries by keeping them well-organized and documented, balancing customization and consistency, and addressing performance issues. It's crucial to develop a sound strategy for effectively managing and optimizing reusable components to ensure a successful and user-friendly React application.
+
+## Libraries
+Libraries dependancies:
+
+1. "@testing-library/jest-dom": "^5.16.5": This library provides custom Jest matchers that can be used to test the state of the DOM.
+2. "@testing-library/react": "^11.2.7": This library provides utilities for testing React components with Jest.
+3. "@testing-library/user-event": "^12.8.3": This library provides a set of functions to simulate user events (like click or type) for testing purposes.
+4. "axios": "^0.21.4": Axios is a popular promise-based HTTP client for making API requests from JavaScript.
+5. "bootstrap": "^4.6.0": Bootstrap is a popular front-end framework for building responsive web pages and applications.
+6. "js-cookie": "^3.0.1": This library provides a simple way to work with browser cookies in JavaScript.
+7. "jwt-decode": "^3.1.2": This library provides a way to decode JSON Web Tokens (JWT) in JavaScript.
+8. "moment": "^2.29.4": Moment.js is a library for working with dates and times in JavaScript.
+9. "node.js": "^0.0.1-security": This is the Node.js runtime, which allows JavaScript to be run on the server-side.
+10. "react": "^17.0.2": React is a popular JavaScript library for building user interfaces.
+11. "react-bootstrap": "^1.6.3": React Bootstrap is a set of pre-built React components that implement the Bootstrap framework.
+12. "react-datepicker": "^4.10.0": This library provides a customizable date picker component for React.
+13. "react-dom": "^17.0.2": React DOM is a package that provides DOM-specific methods for working with React components.
+14. "react-infinite-scroll-component": "^6.1.0": This library provides a React component that allows for infinite scrolling behavior on a page.
+15. "react-router-dom": "^5.3.0": React Router is a popular library for managing navigation in a React application.
+16. "react-scripts": "^4.0.3": React Scripts is a set of scripts and configuration used by Create React App to build, test, and run a React application.
+17. "web-vitals": "^1.1.2": This library provides tools for measuring and analyzing web performance metrics.
 
 ### UX Design
 
@@ -457,51 +625,37 @@ Site was tested to work on Google chrome, firefox, microsoft edge and internet e
 
 - I manually tested the funcionailty of the Todos and the groups APIs
 
+    - When testing the functions of the API the form takes in JSON format 
+
+
     - Todos list
         - GET
-            - I tested whether the to do list can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
-            and that was true
+            - I tested whether the to do list can be viewed with and without authorization. I expected a HTTP 200 OK response in when authorized and HTTP 401 when authorized which was what I got. 
         - POST
             - When Unauthorized there is no form for posting a new todo, using postman I attempted to create a new to do and got back a 403 Forbidden response.
             - When authorised I can post a new todo, but the Title field must be filled in or a HTTP 400 Bad Request is returned
     - Todos Detail ('/todos/1')
         - GET
-            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
-            and that was true
+            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in when authorized and HTTP 401 when authorized which was what I got. 
         - POST
             - This view does not allow post http requests, returned status code 400 on Postman
-        - PATCH
+        - PUT
             - When logged in as the user that created the todo there is a form for PATCH-ing the todo item. other users are not able to send PATCH requests, neither are anonymous users. 403 Forbidden
         - DELETE
             - Same as above only the authorized user who is the 'owner' of the todo can delete a todo. 403 Forbidden
 
     - Groups list
         - GET
-            - The list of groups can only be viewed by an authorized user who is either the owner of the group or a member as defined in this code:
-            ```
-            def get(self, request, *args, **kwargs):
-            """Return a list of groups owned by the current user."""
-            if request.user.is_anonymous:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-            groups = self.get_queryset().filter(
-            Q(owner=request.user) | Q(members=request.user)
-            ).distinct()
-            serializer = self.get_serializer(groups, many=True)
-            return Response(serializer.data)
-            ```
-            - anonymous users get a 404 not found error message and other authorized members get a 200 but can't see unaffiliated groups.
+            - I tested whether the group list can be viewed with and without authorization. I expected a HTTP 200 OK response in when authorized and HTTP 401 when authorized which was what I got. 
         - POST
-            - When Authorized I can post a new todo and the creator is automatically added as a member
+            - When Authorized I can post a new group
 
     - Groups Detail
         - GET
-            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in both cases 
-            but when logging out on the page the anonymous user was not able to access the view:
-                - "Exception Type: TypeError at /groups/1/
-                Exception Value: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7fd74a985f40>."
+            - I tested whether the item can be viewed with and without authorization. I expected a HTTP 200 OK response in when authorized and HTTP 401 when authorized which was what I got. 
         - POST
             - This view does not allow post http requests, returned status code 400 on Postman
-        - PATCH
+        - PUT
             - When logged in as the user that created the group there is a form for PATCH-ing the todo item. other users are not able to send PATCH requests, neither are anonymous users. 403 Forbidden
         - DELETE
             - Same as above only the authorized user who is the 'owner' of the group can delete a group. 403 Forbidden
@@ -511,21 +665,23 @@ Site was tested to work on Google chrome, firefox, microsoft edge and internet e
     - I manually tests the functionality of the Frontend app, checking for succesful data manipulation of Tasks and Groups:
         -Tasks
             - Creating a task on the ToDo page works successfully, the task shows up in the deployed heroku API. The Title is currently the only field that cannot be left blank and it correctly throws up a message when attempted. The newly created task then shows up in the ToDo list. ToDo list items that arn't associated with the current user do not appear.
-            - With the todo list component on the TaskPage and the profile page the delete button allows the user to delete the todo succesfully from the backend.
+            - With the todo list component on the TaskPage and the profile page the delete button allows the user to delete the todo succesfully from the backend. 
             - Pressing the edit button should open a modal that allows the user to change the title, content, or deadline data of the task and then save it. when tested this succesfully updates the backend data.
-            - On the Profile page and landing page I GET todo data and count the number of todos. I expect the profile page to count the todos with the currently logged in user as owner and the Landing page to count the total todos created. Both numbers are correct.
+            - On the Profile page and landing page I GET todo data and count the number of todos. I expect the profile page to count the todos with the currently logged in user as owner and the landing page counts the number of non-complete tasks. Both numbers are correct.
+            - The complete checkbox should mark a task as completed and as the todo list only shows uncompleted tasks the todo list should dissapoear when i check it as complete. Which it does.
 
         - Groups
             - When Creating a group on the profile page, I tested whether you could leave the name of the group blank expecting an error message and it passed.
             - When creating a group with no members, I expected the group to be created with only the currently logged in user as the sole member, which was correct
             - With the group list i expected to be able to see both groups that had been created by the user but also groups created by other users that the current user was a member of, which is correct.
-            - When removing or adding a member to the group I expected the Backend API to reflect this change, And this was correct.
+            - When removing or adding a member to the group I expected the Backend API to reflect this change, And this was correct. 
 
         - Authentication
             - Registering a new account works successfully. Inputting a username that already exists, no username, passwords that dont match, or commonly used passwords ('password') throws up the correct error messages.
             - Logging in works correctly, inputting invalid username or passwords throws up the corrrect error message.
             - I expected the NavBar to change when logged in as a user, and this was correct.
             - I expected 404 errors to be thrown up when trying to access urls that require authorization, eg. taskpage, profilepage etc. , The pages loaded but the user is unable to create a new todo or group, getting a status code 401 unauthorized response.
+
 ## Deployment
 
 - The site was deployed on Heorku. The steps to deploy are as follows

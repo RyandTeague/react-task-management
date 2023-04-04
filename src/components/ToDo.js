@@ -42,7 +42,6 @@ const ToDo = (props) => {
       await axiosRes.delete(`/todos/${id}/`);
       history.goBack();
     } catch (err) {
-      // console.log(err);
     }
   };
 

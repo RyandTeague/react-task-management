@@ -1,12 +1,17 @@
 /* NavBar */
 .NavBar {
   background-color: #191919;
-  color: #c9c9c9;
+  color: #eadede;
   height: 80px;
 }
 
 .Navbar.Brand h1 {
   font-size: 2rem;
+}
+
+.Toggle {
+  justify-content: flex-end;
+  background: #755c5c;
 }
 
 .Navbar.Collapse {
